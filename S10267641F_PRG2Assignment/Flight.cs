@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace S10267641F_PRG2Assignment
 {
-    class Flight
+    abstract class Flight
     {
         public string FlightNumber {  get; set; }   
         public string Origin { get; set; }
@@ -22,10 +22,8 @@ namespace S10267641F_PRG2Assignment
             ExpectedTime = expectedTime;
             Status = status;
         }
-        public virtual double CalculateFees()
-        {
-            
-        }
+        public abstract double CalculateFees();
+        
         public override string ToString()
         {
             return; 

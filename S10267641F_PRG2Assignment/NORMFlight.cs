@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +15,21 @@ namespace S10267641F_PRG2Assignment
 
         public override double CalculateFees()
         {
-            return;
+            double boardingfee = 300.00;
+            double total;
+            if (Origin == "SIN")
+            {
+                total = 500.00 + boardingfee;
+            }
+            else if (Destination == "SIN")
+            {
+                total = 800.00 + boardingfee;
+            }
+            else
+            {
+                total = boardingfee;
+            }
+            return total;
         }
 
         public override string ToString()
