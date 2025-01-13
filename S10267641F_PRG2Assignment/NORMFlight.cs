@@ -34,7 +34,7 @@ namespace S10267641F_PRG2Assignment
 
         public override string ToString()
         {
-            return base.ToString() + $", Fees: {CalculateFees()}";
+            return base.ToString() + $", Fees: {CalculateFees():F2}";
         }
     }
 }

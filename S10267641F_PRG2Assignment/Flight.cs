@@ -26,7 +26,7 @@ namespace S10267641F_PRG2Assignment
         
         public override string ToString()
         {
-            return; 
+            return $"{FlightNumber, -8} {Origin, -20} {Destination, -20} {ExpectedTime, -24} {Status, -12}"; 
         }
     }
 }
