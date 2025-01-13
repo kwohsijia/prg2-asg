@@ -24,17 +24,40 @@ namespace S10267641F_PRG2Assignment
         }
         public bool AddAirline(Airline airline)
         {
-
+            if (Airline.ContainsKey(airline.Code))
+            {
+                return false;
+            }
+            else
+            {
+                Airline.Add(airline.Code, airline);
+                return true;
+            }
         }
 
         public bool AddBoardingGate(BoardingGate boardingGate)
         {
-
+            if (BoardingGates.ContainsKey(boardingGate.GateNumber))
+            {
+                return false;
+            }
+            else
+            {
+                BoardingGates.Add(boardingGate.GateNumber, boardingGate);
+                return true;
+            }
         }
 
         public Airline GetAirlineFromFlight(Flight flight)
         {
-
+            foreach (var Airline in Airline.Values)
+            {
+                if (Airline.Flights.ContainsKey(flight.FlightNumber))
+                {
+                    return Airline;
+                }
+            }
+            return null;
         }
 
         public void PrintAirlineFees()
@@ -44,7 +67,7 @@ namespace S10267641F_PRG2Assignment
 
         public override string ToString()
         {
-
+            return "Terminal: " + TerminalName + "Airline: " + Airline + "Flights: " + Flights + "Boarding Gates: " + BoardingGates + "Gate Fees: " + GateFees;
         }
     }
 }
