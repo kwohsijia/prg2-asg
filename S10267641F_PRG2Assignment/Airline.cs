@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace S10267641F_PRG2Assignment
 {
-    internal class Airline
+    class Airline
     {
+
     }
 }
