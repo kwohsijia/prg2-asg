@@ -22,7 +22,7 @@ namespace S10267641F_PRG2Assignment
             ExpectedTime = expectedTime;
             Status = status;
         }
-        public double CalculateFees()
+        public virtual double CalculateFees()
         {
             
         }
