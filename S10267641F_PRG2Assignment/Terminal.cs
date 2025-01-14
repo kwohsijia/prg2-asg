@@ -37,13 +37,13 @@ namespace S10267641F_PRG2Assignment
 
         public bool AddBoardingGate(BoardingGate boardingGate)
         {
-            if (BoardingGates.ContainsKey(boardingGate.GateNumber))
+            if (BoardingGates.ContainsKey(boardingGate.GateName))
             {
                 return false;
             }
             else
             {
-                BoardingGates.Add(boardingGate.GateNumber, boardingGate);
+                BoardingGates.Add(boardingGate.GateName, boardingGate);
                 return true;
             }
         }
