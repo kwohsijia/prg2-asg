@@ -44,10 +44,40 @@ LoadFiles(airlineList, boardinggateDict);
 // Student Name	: Ian Tan Jun Yang
 // Partner Name	: Kwoh Si Jia 
 //==========================================================
+
+Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
 void LoadFlights()
 {
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
-
+        string s = sr.ReadLine();
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] data = s.Split(',');
+            string flightNumber = data[0];
+            string origin = data[1];
+            string destination = data[2];
+            DateTime expectedTime = DateTime.Parse(data[3]);
+            string status = data[4];
+            string type = data[5];
+            double requestFee = double.Parse(data[6]);
+            if (type == "CFFT")
+            {
+                CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime, requestFee, status);
+                flightDict.Add(flightNumber, newflight);
+            }
+            else if (type == "DDJB")
+            {
+                DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime, requestFee, status);
+                flightDict.Add(flightNumber, newflight);
+            }
+            else if (type == "LWTT")
+            {
+                LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime, requestFee, status);
+                flightDict.Add(flightNumber, newflight);
+            }
+        }
     }
 }
+
+LoadFlights();
