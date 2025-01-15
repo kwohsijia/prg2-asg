@@ -30,6 +30,10 @@ namespace S10267641F_PRG2Assignment
             {
                 total = 800.00;
             }
+            else
+            {
+                total = 0.00;
+            }
             return total;
         }
 

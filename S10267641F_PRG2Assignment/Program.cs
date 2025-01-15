@@ -1,4 +1,5 @@
 ﻿using S10267641F_PRG2Assignment;
+using System.Numerics;
 //==========================================================
 // Student Number	: S10267641F
 // Student Name	: Kwoh Si Jia
@@ -39,6 +40,22 @@ void LoadFiles(List<Airline> airlineList, Dictionary<string,BoardingGate> boardi
 
 LoadFiles(airlineList, boardinggateDict);
 
+void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this is option 2 in the sample output
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
+    foreach (BoardingGate bg in boardinggateDict.Values)
+    {
+        Console.WriteLine(bg.ToString());
+    }
+}
+
+void DisplayFlightDetails(List<Airline> airlineList, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
+{
+
+}
 //==========================================================
 // Student Number	: S10268190F
 // Student Name	: Ian Tan Jun Yang
