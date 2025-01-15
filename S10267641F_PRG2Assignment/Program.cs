@@ -31,7 +31,7 @@ void LoadFiles(List<Airline> airlineList, Dictionary<string,BoardingGate> boardi
             string supportDDJB = data[1];
             string supportCFFT = data[2];
             string supportLWTT = data[3];
-            BoardingGate newboardinggate = new BoardingGate(gateName,supportDDJB, supportCFFT, supportLWTT);
+            BoardingGate newboardinggate = new BoardingGate(gateName,supportDDJB, supportCFFT, supportLWTT, new Flight());
             boardinggateDict.Add(gateName, newboardinggate);
         }
     }

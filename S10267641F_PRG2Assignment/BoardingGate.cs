@@ -33,6 +33,11 @@ namespace S10267641F_PRG2Assignment
         {
             return Flight.CalculateFees() + 300.0;
         }
-        
+
+        public override string ToString()
+        {
+            return $"{GateName,-16}{SupportsDDJB,-23}{SupportsCFFT,-23}{SupportsLWTT}";
+        }
+
     }
 }
