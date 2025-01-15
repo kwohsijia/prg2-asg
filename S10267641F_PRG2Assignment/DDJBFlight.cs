@@ -4,6 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//==========================================================
+// Student Number	: S10267641F
+// Student Name	: Kwoh Si Jia
+// Partner Name	: Ian Tan Jun Yang 
+//==========================================================
+// Student Number	: S10268190F
+// Student Name	: Ian Tan Jun Yang
+// Partner Name	: Kwoh Si Jia 
+//==========================================================
+//==========================================================
 namespace S10267641F_PRG2Assignment
 {
     class DDJBFlight : Flight

@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//==========================================================
+// Student Number	: S10268190F
+// Student Name	: Ian Tan Jun Yang
+// Partner Name	: Kwoh Si Jia 
+//==========================================================
+
 namespace S10267641F_PRG2Assignment
 {
     class BoardingGate
@@ -27,5 +33,6 @@ namespace S10267641F_PRG2Assignment
         {
             return Flight.CalculateFees() + 300.0;
         }
+        
     }
 }

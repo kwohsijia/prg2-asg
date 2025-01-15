@@ -7,7 +7,7 @@
 
 List<Airline> airlineList = new List<Airline>();
 Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
-void LoadFiles(List<Airline> airlineList, List<BoardingGate> boardinggateList)
+void LoadFiles(List<Airline> airlineList, Dictionary<string,BoardingGate> boardinggateDict)
 {
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
@@ -36,6 +36,8 @@ void LoadFiles(List<Airline> airlineList, List<BoardingGate> boardinggateList)
         }
     }
 }
+
+LoadFiles(airlineList, boardinggateDict);
 
 //==========================================================
 // Student Number	: S10268190F
