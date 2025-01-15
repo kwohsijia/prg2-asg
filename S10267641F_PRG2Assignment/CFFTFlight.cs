@@ -23,11 +23,11 @@ namespace S10267641F_PRG2Assignment
         public override double CalculateFees()
         {
             double total;
-            if (Origin.Split(" ")[1].Trim('(', ')') == "SIN")
+            if (Origin == "Singapore (SIN)")
             {
                 total = 500.00 + 150.00;
             }
-            else if (Destination.Split(" ")[1].Trim('(', ')') == "SIN")
+            else if (Destination == "Singapore (SIN)")
             {
                 total = 800.00 + 150.00;
             }
