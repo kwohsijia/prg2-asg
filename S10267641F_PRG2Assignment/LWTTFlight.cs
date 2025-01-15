@@ -21,7 +21,7 @@ namespace S10267641F_PRG2Assignment
     {
         public double RequestFee { get; set; }
 
-        public LWTTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, double requestFee, string status = "On Time")
+        public LWTTFlight(string flightNumber, string origin, string destination, DateTime expectedTime, double requestFee = 500.0, string status = "On Time")
             : base(flightNumber, origin, destination, expectedTime, status)
         {
             RequestFee = requestFee;
@@ -30,11 +30,11 @@ namespace S10267641F_PRG2Assignment
         public override double CalculateFees()
         {
             double total;
-            if (Origin == "SIN")
+            if (Origin.Split(" ")[1].Trim('(', ')') == "SIN")
             {
                 total = 500.00 + 500.00;
             }
-            else if (Destination == "SIN")
+            else if (Destination.Split(" ")[1].Trim('(', ')') == "SIN")
             {
                 total = 800.00 + 500.00;
             }
@@ -47,7 +47,7 @@ namespace S10267641F_PRG2Assignment
 
         public override string ToString()
         {
-            return base.ToString() + $", Request Fee: {RequestFee :F2}, Total Fees: {CalculateFees():F2}";
+            return base.ToString() + $" Request Fee: {RequestFee :F2} Total Fees: {CalculateFees():F2}";
         }
     }
 }
