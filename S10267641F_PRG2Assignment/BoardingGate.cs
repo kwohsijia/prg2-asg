@@ -33,5 +33,6 @@ namespace S10267641F_PRG2Assignment
         {
             return Flight.CalculateFees() + 300.0;
         }
+
     }
 }
