@@ -20,11 +20,11 @@ namespace S10267641F_PRG2Assignment
         public override double CalculateFees()
         {
             double total = 0.0;
-            if (Origin == "SIN")
+            if (Origin == "Singapore (SIN)")
             {
                 total = 500.00;
             }
-            else if (Destination == "SIN")
+            else if (Destination == "Singapore (SIN)")
             {
                 total = 800.00;
             }
