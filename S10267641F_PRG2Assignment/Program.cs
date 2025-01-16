@@ -4,14 +4,13 @@
 //==========================================================
 using S10267641F_PRG2Assignment;
 
-Dictionary<string, Airline> airlineDict = new Dictionary<string, Airline>();
-Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
-Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
+Terminal terminal = new Terminal("Terminal 5");
 int flightCount = 0;
 int airlinecount = 0;
 int boardingcount = 0;
-LoadFlights();
-LoadFiles(airlineDict, boardinggateDict);
+LoadFlights(terminal);
+LoadAirline(terminal);
+LoadBoardingGate(terminal);
 Console.WriteLine("Loading Airlines...");
 Console.WriteLine($"{airlinecount} Airlines Loaded!");
 Console.WriteLine("Loading Boarding Gates...");
@@ -46,11 +45,11 @@ while (true)
     }
     else if (option == 2)
     {
-        ListBoardingGates(boardinggateDict);
+        ListBoardingGates(terminal);
     }
 }
 
-void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict)
+void LoadAirline(Terminal t)
 {
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
@@ -61,10 +60,14 @@ void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string, Board
             string name = data[0];
             string code = data[1];
             Airline newairline = new Airline(name, code);
-            airlineDict.Add(name, newairline);
+            t.Airline.Add(name, newairline);
             airlinecount++;
         }
     }
+}
+
+void LoadBoardingGate (Terminal t)
+{
     using (StreamReader sr = new StreamReader("boardinggates.csv"))
     {
         string? s = sr.ReadLine();
@@ -75,23 +78,22 @@ void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string, Board
             string supportDDJB = data[1];
             string supportCFFT = data[2];
             string supportLWTT = data[3];
-            BoardingGate boardingGate = new BoardingGate(gateName,Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportLWTT), null);
-            boardinggateDict.Add(gateName, boardingGate);
+            BoardingGate boardingGate = new BoardingGate(gateName, Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportLWTT), null);
+            t.BoardingGates.Add(gateName, boardingGate);
 
 
         }
     }
 }
 
-LoadFiles(airlineDict, boardinggateDict);
 
-void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this is option 2 in the sample output
+void ListBoardingGates(Terminal t) //this is option 2 in the sample output
 {
     Console.WriteLine("=============================================");
     Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
     Console.WriteLine("=============================================");
     Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
-    foreach (KeyValuePair<string, BoardingGate> kvp in boardinggateDict)
+    foreach (KeyValuePair<string, BoardingGate> kvp in t.BoardingGates)
     {
         BoardingGate boardingGate = kvp.Value;
         Console.WriteLine(boardingGate.ToString());
@@ -104,7 +106,7 @@ void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<st
 
 }
 
-void LoadFlights()
+void LoadFlights(Terminal t)
 {
         using (StreamReader sr = new StreamReader("flights.csv"))
         {
@@ -120,19 +122,19 @@ void LoadFlights()
                 if (type == "CFFT")
                 {
                     CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
-                    flightDict.Add(flightNumber, newflight);
+                    t.Flights.Add(flightNumber, newflight);
                 }
                 else if (type == "DDJB")
                 {
                     DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
-                    flightDict.Add(flightNumber, newflight);
+                    t.Flights.Add(flightNumber, newflight);
                 }
                 else if (type == "LWTT")
                 {
                     LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
-                    flightDict.Add(flightNumber, newflight);
+                    t.Flights.Add(flightNumber, newflight);
                 }
-                count++;
+                flightCount++;
             }
         }
     }
