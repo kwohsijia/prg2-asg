@@ -38,7 +38,8 @@ while (true)
         ListBoardingGates(boardinggateDict);
     }
 }
-void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string,BoardingGate> boardinggateDict)
+
+void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict)
 {
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
@@ -65,16 +66,35 @@ void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string,Boardi
 
             foreach (KeyValuePair<string, Airline> kvp in airlineDict)
             {
-                foreach(KeyValuePair<string, Flight> kvp2 in kvp.Value.Flights)
+                foreach (KeyValuePair<string, Flight> kvp2 in kvp.Value.Flights)
                 {
                     BoardingGate newboardinggate = new BoardingGate(gateName, Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportLWTT), kvp2.Value);
                     boardinggateDict.Add(gateName, newboardinggate);
                 }
             }
-            
+
         }
     }
 }
+
+LoadFiles(airlineDict, boardinggateDict);
+
+void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this is option 2 in the sample output
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
+    foreach (KeyValuePair<string, BoardingGate> kvp in boardinggateDict)
+    {
+        BoardingGate boardingGate = kvp.Value;
+        Console.WriteLine(boardingGate.ToString());
+    }
+}
+
+
+void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
+{
 
 LoadFiles(airlineDict, boardinggateDict);
 
@@ -94,7 +114,7 @@ void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this
 
 void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
 {
-
+  return
 }
 //==========================================================
 // Student Number	: S10268190F
