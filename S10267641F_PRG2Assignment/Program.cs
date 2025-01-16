@@ -75,9 +75,9 @@ void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string, Board
             string supportDDJB = data[1];
             string supportCFFT = data[2];
             string supportLWTT = data[3];
+            BoardingGate boardingGate = new BoardingGate(gateName,Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportLWTT), null);
+            boardinggateDict.Add(gateName, boardingGate);
 
-
-          
 
         }
     }
