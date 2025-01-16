@@ -46,6 +46,10 @@ while (true)
     {
         ListBoardingGates(terminal);
     }
+    else if (option == 3)
+    {
+        AssignBoardingGate(terminal);
+    }
 }
 
 void LoadAirline(Terminal t)
@@ -145,4 +149,19 @@ void ListFlights(Terminal t)
     {
         Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime);
     }
+}
+
+void AssignBoardingGate(Terminal t)
+{
+    Console.WriteLine("============================================\nAssign a Boarding Gate to a Flight\n============================================");
+    Console.WriteLine("Enter Flight Number:");
+    string flightNumber = Console.ReadLine();
+    Console.WriteLine("Enter Boarding Gate Name:");
+    string gateName = Console.ReadLine();
+    Console.WriteLine($"Flight Number: {flightNumber}");
+    Flight flight = t.Flights[flightNumber];
+    Console.WriteLine($"Origin: {flight.Origin}");
+    Console.WriteLine($"Destination: {flight.Destination}");
+    Console.WriteLine($"Expected Time: {flight.ExpectedTime}");
+    
 }
