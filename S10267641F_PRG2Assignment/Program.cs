@@ -1,5 +1,7 @@
 ﻿using S10267641F_PRG2Assignment;
-//Main Loop
+
+Dictionary<string, Airline> airlineDict = new Dictionary<string, Airline>();
+Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
 Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
 int count = 0;
 LoadFlights();
@@ -31,49 +33,69 @@ while (true)
         Console.WriteLine("=============================================\nList of Flights for Changi Airport Terminal 5\n=============================================");
         Console.WriteLine("{0,-15} {1,-15} {2,-10} {3,-15} {4,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
     }
+    else if (option == 2)
+    {
+        ListBoardingGates(boardinggateDict);
+    }
+}
+void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict)
+{
+    using (StreamReader sr = new StreamReader("airlines.csv"))
+    {
+        string? s = sr.ReadLine();
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] data = s.Split(',');
+            string name = data[0];
+            string code = data[1];
+            Airline newairline = new Airline(name, code);
+            airlineDict.Add(name, newairline);
+        }
+    }
+    using (StreamReader sr = new StreamReader("boardinggates.csv"))
+    {
+        string? s = sr.ReadLine();
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] data = s.Split(',');
+            string gateName = data[0];
+            string supportDDJB = data[1];
+            string supportCFFT = data[2];
+            string supportLWTT = data[3];
+
+            foreach (KeyValuePair<string, Airline> kvp in airlineDict)
+            {
+                foreach (KeyValuePair<string, Flight> kvp2 in kvp.Value.Flights)
+                {
+                    BoardingGate newboardinggate = new BoardingGate(gateName, Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportLWTT), kvp2.Value);
+                    boardinggateDict.Add(gateName, newboardinggate);
+                }
+            }
+
+        }
+    }
+}
+
+LoadFiles(airlineDict, boardinggateDict);
+
+void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this is option 2 in the sample output
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
+    foreach (KeyValuePair<string, BoardingGate> kvp in boardinggateDict)
+    {
+        BoardingGate boardingGate = kvp.Value;
+        Console.WriteLine(boardingGate.ToString());
+    }
 }
 
 
-//==========================================================
-// Student Number	: S10267641F
-// Student Name	: Kwoh Si Jia
-// Partner Name	: Ian Tan Jun Yang 
-//==========================================================
+void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
+{
 
-//List<Airline> airlineList = new List<Airline>();
-//Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
-//void LoadFiles(List<Airline> airlineList, Dictionary<string, BoardingGate> boardinggateDict)
-//{
-//    using (StreamReader sr = new StreamReader("airlines.csv"))
-//    {
-//        string? s = sr.ReadLine();
-//        while ((s = sr.ReadLine()) != null)
-//        {
-//            string[] data = s.Split(',');
-//            string name = data[0];
-//            string code = data[1];
-//            Airline newairline = new Airline(name, code);
-//            airlineList.Add(newairline);
-//        }
-//    }
-//    using (StreamReader sr = new StreamReader("boardinggates.csv"))
-//    {
-//        string? s = sr.ReadLine();
-//        while ((s = sr.ReadLine()) != null)
-//        {
-//            string[] data = s.Split(',');
-//            string gateName = data[0];
-//            string supportDDJB = data[1];
-//            string supportCFFT = data[2];
-//            string supportLWTT = data[3];
-//            BoardingGate newboardinggate = new BoardingGate(gateName, supportDDJB, supportCFFT, supportLWTT, new Flight());
-//            boardinggateDict.Add(gateName, newboardinggate);
-//        }
-//    }
-//}
-
-//LoadFiles(airlineList, boardinggateDict);
-
+}
 //==========================================================
 // Student Number	: S10268190F
 // Student Name	: Ian Tan Jun Yang
