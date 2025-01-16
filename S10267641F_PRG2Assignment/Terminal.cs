@@ -55,14 +55,17 @@ namespace S10267641F_PRG2Assignment
 
         public Airline GetAirlineFromFlight(Flight flight)
         {
-            foreach (var Airline in Airline.Values)
+            string code = flight.FlightNumber.Substring(0, 2);
+            Airline? airline = null;
+            
+            foreach (KeyValuePair<string, Airline> a in Airline)
             {
-                if (Airline.Flights.ContainsKey(flight.FlightNumber))
+                if (a.Value.Code == code)
                 {
-                    return Airline;
+                    airline = a.Value;
                 }
             }
-            return null;
+            return airline;
         }
 
         public void PrintAirlineFees()

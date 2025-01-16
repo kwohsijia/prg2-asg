@@ -40,8 +40,7 @@ while (true)
 
     else if (option == 1)
     {
-        Console.WriteLine("=============================================\nList of Flights for Changi Airport Terminal 5\n=============================================");
-        Console.WriteLine("{0,-15} {1,-15} {2,-10} {3,-15} {4,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
+        ListFlights(terminal);
     }
     else if (option == 2)
     {
@@ -100,7 +99,7 @@ void ListBoardingGates(Terminal t) //this is option 2 in the sample output
 }
 
 
-void LoadFlights(Airline a)
+void LoadFlights(Terminal t)
 {
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
@@ -116,25 +115,34 @@ void LoadFlights(Airline a)
             if (type == "CFFT")
             {
                 CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
-                a.AddFlight(newflight);
+                t.Flights.Add(flightNumber, newflight);
             }
             else if (type == "DDJB")
             {
                 DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
-                a.AddFlight(newflight);
+                t.Flights.Add(flightNumber, newflight);
             }
             else if (type == "LWTT")
             {
                 LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
-                a.AddFlight(newflight);
+                t.Flights.Add(flightNumber, newflight);
             }
             else
             {
                 NORMFlight newflight = new NORMFlight(flightNumber, origin, destination, expectedTime);
-                a.AddFlight(newflight);
+                t.Flights.Add(flightNumber, newflight);
             }
             flightCount++;
         }
     }
+}
 
+void ListFlights(Terminal t)
+{
+    Console.WriteLine("=============================================\nList of Flights for Changi Airport Terminal 5\n=============================================");
+    Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
+    foreach (Flight f in t.Flights.Values)
+    {
+        Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime);
+    }
 }
