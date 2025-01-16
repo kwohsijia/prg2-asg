@@ -1,4 +1,38 @@
 ﻿using S10267641F_PRG2Assignment;
+//Main Loop
+Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
+int count = 0;
+LoadFlights();
+Console.WriteLine("Loading Flights...");
+Console.WriteLine($"{count} Flights Loaded!");
+while (true)
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Welcome to Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine("1. List All Flights");
+    Console.WriteLine("2. List Boarding Gates");
+    Console.WriteLine("3. Assign Boarding Gate to a Flight");
+    Console.WriteLine("4. Create Flight");
+    Console.WriteLine("5. Display Airline Flights");
+    Console.WriteLine("6. Modify Flight Details");
+    Console.WriteLine("7. Display Flight Schedule");
+    Console.WriteLine("0. Exit");
+    Console.WriteLine("\nPlease select your option:");
+    int option = Convert.ToInt32(Console.ReadLine());
+
+    if (option == 0)
+    {
+        break;
+    }
+
+    else if (option == 1)
+    {
+        Console.WriteLine("Flight Number");
+    }
+}
+
+
 //==========================================================
 // Student Number	: S10267641F
 // Student Name	: Kwoh Si Jia
@@ -45,7 +79,7 @@
 // Partner Name	: Kwoh Si Jia 
 //==========================================================
 
-Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
+//Basic Feature 2
 void LoadFlights()
 {
     using (StreamReader sr = new StreamReader("flights.csv"))
@@ -74,8 +108,7 @@ void LoadFlights()
                 LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
                 flightDict.Add(flightNumber, newflight);
             }
+            count++;
         }
     }
 }
-
-LoadFlights();
