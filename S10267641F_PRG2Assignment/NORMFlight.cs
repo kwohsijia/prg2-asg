@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 //==========================================================
-// Student Number	: S10267641F
-// Student Name	: Kwoh Si Jia
-// Partner Name	: Ian Tan Jun Yang 
+// Student Name	: Ian Tan Jun Yang (S10268190F)
+// Student Name	: Kwoh Si Jia (S10267641F)
 //==========================================================
 
 namespace S10267641F_PRG2Assignment
