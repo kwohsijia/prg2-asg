@@ -103,7 +103,34 @@ void ListBoardingGates(Terminal t) //this is option 2 in the sample output
 
 void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
 {
-
+    using (StreamReader sr = new StreamReader("flights.csv"))
+    {
+        string s = sr.ReadLine();
+        while ((s = sr.ReadLine()) != null)
+        {
+            string[] data = s.Split(',');
+            string flightNumber = data[0];
+            string origin = data[1];
+            string destination = data[2];
+            DateTime expectedTime = DateTime.Parse(data[3]);
+            string type = data[4];
+            if (type == "CFFT")
+            {
+                CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
+                t.Flights.Add(flightNumber, newflight);
+            }
+            else if (type == "DDJB")
+            {
+                DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
+                t.Flights.Add(flightNumber, newflight);
+            }
+            else if (type == "LWTT")
+            {
+                LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
+                t.Flights.Add(flightNumber, newflight);
+            }
+            flightCount++;
+        }
+    }
+    
 }
-
-
