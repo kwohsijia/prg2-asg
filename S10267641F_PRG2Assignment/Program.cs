@@ -28,7 +28,8 @@ while (true)
 
     else if (option == 1)
     {
-        Console.WriteLine("Flight Number");
+        Console.WriteLine("=============================================\nList of Flights for Changi Airport Terminal 5\n=============================================");
+        Console.WriteLine("{0,-15} {1,-15} {2,-10} {3,-15} {4,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
     }
 }
 
