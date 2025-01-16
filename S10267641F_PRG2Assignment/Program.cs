@@ -132,7 +132,7 @@ void LoadFlights()
                     LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
                     flightDict.Add(flightNumber, newflight);
                 }
-                count++;
+                flightCount++;
             }
         }
     }
