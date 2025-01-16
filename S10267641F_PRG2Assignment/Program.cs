@@ -105,26 +105,32 @@ void LoadFlights(Terminal t)
 {
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
-        string origin = data[1];
-        string destination = data[2];
-        DateTime expectedTime = DateTime.Parse(data[3]);
-        string type = data[4];
-        if (type == "CFFT")
+        string s = sr.ReadLine();
+        while ((s = sr.ReadLine()) != null)
         {
-            CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
-            t.Flights.Add(flightNumber, newflight);
+            string[] data = s.Split(',');
+            string flightNumber = data[0];
+            string origin = data[1];
+            string destination = data[2];
+            DateTime expectedTime = DateTime.Parse(data[3]);
+            string type = data[4];
+            if (type == "CFFT")
+            {
+                CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
+                t.Flights.Add(flightNumber, newflight);
+            }
+            else if (type == "DDJB")
+            {
+                DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
+                t.Flights.Add(flightNumber, newflight);
+            }
+            else if (type == "LWTT")
+            {
+                LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
+                t.Flights.Add(flightNumber, newflight);
+            }
+            flightCount++;
         }
-        else if (type == "DDJB")
-        {
-            DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
-            t.Flights.Add(flightNumber, newflight);
-        }
-        else if (type == "LWTT")
-        {
-            LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
-            t.Flights.Add(flightNumber, newflight);
-        }
-        flightCount++;
     }
     
 }
