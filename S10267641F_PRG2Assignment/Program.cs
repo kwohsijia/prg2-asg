@@ -7,7 +7,7 @@ using S10267641F_PRG2Assignment;
 Dictionary<string, Airline> airlineDict = new Dictionary<string, Airline>();
 Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
 Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
-int count = 0;
+int flightCount = 0;
 int airlinecount = 0;
 int boardingcount = 0;
 LoadFlights();
@@ -17,7 +17,7 @@ Console.WriteLine($"{airlinecount} Airlines Loaded!");
 Console.WriteLine("Loading Boarding Gates...");
 Console.WriteLine($"{boardingcount} Boarding Gates Loaded!");
 Console.WriteLine("Loading Flights...");
-Console.WriteLine($"{count} Flights Loaded!");
+Console.WriteLine($"{flightCount} Flights Loaded!");
 while (true)
 {
     Console.WriteLine("=============================================");
