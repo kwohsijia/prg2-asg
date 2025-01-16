@@ -1,5 +1,7 @@
 ﻿using S10267641F_PRG2Assignment;
 
+Dictionary<string, Airline> airlineDict = new Dictionary<string, Airline>();
+Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
 Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
 int count = 0;
 LoadFlights();
@@ -30,10 +32,11 @@ while (true)
     {
         Console.WriteLine("Flight Number");
     }
+    else if (option == 2)
+    {
+        ListBoardingGates(boardinggateDict);
+    }
 }
-
-Dictionary<string, Airline> airlineDict = new Dictionary<string, Airline>();
-Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
 void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string,BoardingGate> boardinggateDict)
 {
     using (StreamReader sr = new StreamReader("airlines.csv"))
@@ -58,8 +61,16 @@ void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string,Boardi
             string supportDDJB = data[1];
             string supportCFFT = data[2];
             string supportLWTT = data[3];
-            BoardingGate newboardinggate = new BoardingGate(gateName,Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportLWTT), new Flight());
-            boardinggateDict.Add(gateName, newboardinggate);
+
+            foreach (KeyValuePair<string, Airline> kvp in airlineDict)
+            {
+                foreach(KeyValuePair<string, Flight> kvp2 in kvp.Value.Flights)
+                {
+                    BoardingGate newboardinggate = new BoardingGate(gateName, Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportLWTT), kvp2.Value);
+                    boardinggateDict.Add(gateName, newboardinggate);
+                }
+            }
+            
         }
     }
 }
@@ -72,11 +83,13 @@ void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this
     Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
     Console.WriteLine("=============================================");
     Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
-    foreach (BoardingGate bg in boardinggateDict.Values)
+    foreach(KeyValuePair<string, BoardingGate> kvp in boardinggateDict)
     {
-        Console.WriteLine(bg.ToString());
+        BoardingGate boardingGate = kvp.Value;
+        Console.WriteLine(boardingGate.ToString());
     }
 }
+
 
 void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
 {
