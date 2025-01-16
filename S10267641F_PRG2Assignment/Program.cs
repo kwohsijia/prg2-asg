@@ -118,7 +118,8 @@ void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<st
     }
 }
 
-    {
+void LoadFlights()
+{
         using (StreamReader sr = new StreamReader("flights.csv"))
         {
             string s = sr.ReadLine();
