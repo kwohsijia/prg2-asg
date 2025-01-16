@@ -16,12 +16,11 @@ namespace S10267641F_PRG2Assignment
     {
         public string Name { get; set; }
         public string Code { get; set; }
-        public Dictionary<string, Flight> Flights { get; set; }
+        public Dictionary<string, Flight> Flights { get; set; } = new Dictionary<string, Flight>();
         public Airline(string name, string code)
         {
             Name = name;
             Code = code;
-            Flights = new Dictionary<string, Flight>();
         }
 
         public bool AddFlight(Flight flight)
