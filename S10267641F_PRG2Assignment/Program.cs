@@ -1,13 +1,40 @@
 ﻿using S10267641F_PRG2Assignment;
-//==========================================================
-// Student Number	: S10267641F
-// Student Name	: Kwoh Si Jia
-// Partner Name	: Ian Tan Jun Yang 
-//==========================================================
 
-List<Airline> airlineList = new List<Airline>();
+Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
+int count = 0;
+LoadFlights();
+Console.WriteLine("Loading Flights...");
+Console.WriteLine($"{count} Flights Loaded!");
+while (true)
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Welcome to Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine("1. List All Flights");
+    Console.WriteLine("2. List Boarding Gates");
+    Console.WriteLine("3. Assign Boarding Gate to a Flight");
+    Console.WriteLine("4. Create Flight");
+    Console.WriteLine("5. Display Airline Flights");
+    Console.WriteLine("6. Modify Flight Details");
+    Console.WriteLine("7. Display Flight Schedule");
+    Console.WriteLine("0. Exit");
+    Console.WriteLine("\nPlease select your option:");
+    int option = Convert.ToInt32(Console.ReadLine());
+
+    if (option == 0)
+    {
+        break;
+    }
+
+    else if (option == 1)
+    {
+        Console.WriteLine("Flight Number");
+    }
+}
+
+Dictionary<string, Airline> airlineDict = new Dictionary<string, Airline>();
 Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
-void LoadFiles(List<Airline> airlineList, Dictionary<string,BoardingGate> boardinggateDict)
+void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string,BoardingGate> boardinggateDict)
 {
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
@@ -18,7 +45,7 @@ void LoadFiles(List<Airline> airlineList, Dictionary<string,BoardingGate> boardi
             string name = data[0];
             string code = data[1];
             Airline newairline = new Airline(name, code);
-            airlineList.Add(newairline);
+            airlineDict.Add(name, newairline);
         }
     }
     using (StreamReader sr = new StreamReader("boardinggates.csv"))
@@ -31,13 +58,28 @@ void LoadFiles(List<Airline> airlineList, Dictionary<string,BoardingGate> boardi
             string supportDDJB = data[1];
             string supportCFFT = data[2];
             string supportLWTT = data[3];
-            BoardingGate newboardinggate = new BoardingGate(gateName,supportDDJB, supportCFFT, supportLWTT, new Flight());
+            BoardingGate newboardinggate = new BoardingGate(gateName,Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportLWTT), new Flight());
             boardinggateDict.Add(gateName, newboardinggate);
         }
     }
 }
 
-LoadFiles(airlineList, boardinggateDict);
+LoadFiles(airlineDict, boardinggateDict);
+
+void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this is option 2 in the sample output
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
+    foreach (BoardingGate bg in boardinggateDict.Values)
+    {
+        Console.WriteLine(bg.ToString());
+    }
+}
+
+void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
+{
 
 }
 //==========================================================
