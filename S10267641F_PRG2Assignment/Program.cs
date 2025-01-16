@@ -102,58 +102,50 @@ void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this
 void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
 {
 
-LoadFiles(airlineDict, boardinggateDict);
+    LoadFiles(airlineDict, boardinggateDict);
 
-void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this is option 2 in the sample output
-{
-    Console.WriteLine("=============================================");
-    Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
-    Console.WriteLine("=============================================");
-    Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
-    foreach(KeyValuePair<string, BoardingGate> kvp in boardinggateDict)
+    void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this is option 2 in the sample output
     {
-        BoardingGate boardingGate = kvp.Value;
-        Console.WriteLine(boardingGate.ToString());
-    }
-}
-
-
-void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
-{
-  return
-}
-
-
-//Basic Feature 2
-void LoadFlights()
-{
-    using (StreamReader sr = new StreamReader("flights.csv"))
-    {
-        string s = sr.ReadLine();
-        while ((s = sr.ReadLine()) != null)
+        Console.WriteLine("=============================================");
+        Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
+        foreach (KeyValuePair<string, BoardingGate> kvp in boardinggateDict)
         {
-            string[] data = s.Split(',');
-            string flightNumber = data[0];
-            string origin = data[1];
-            string destination = data[2];
-            DateTime expectedTime = DateTime.Parse(data[3]);
-            string type = data[4];
-            if (type == "CFFT")
-            {
-                CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
-                flightDict.Add(flightNumber, newflight);
-            }
-            else if (type == "DDJB")
-            {
-                DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
-                flightDict.Add(flightNumber, newflight);
-            }
-            else if (type == "LWTT")
-            {
-                LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
-                flightDict.Add(flightNumber, newflight);
-            }
-            count++;
+            BoardingGate boardingGate = kvp.Value;
+            Console.WriteLine(boardingGate.ToString());
         }
     }
 }
+
+    {
+        using (StreamReader sr = new StreamReader("flights.csv"))
+        {
+            string s = sr.ReadLine();
+            while ((s = sr.ReadLine()) != null)
+            {
+                string[] data = s.Split(',');
+                string flightNumber = data[0];
+                string origin = data[1];
+                string destination = data[2];
+                DateTime expectedTime = DateTime.Parse(data[3]);
+                string type = data[4];
+                if (type == "CFFT")
+                {
+                    CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
+                    flightDict.Add(flightNumber, newflight);
+                }
+                else if (type == "DDJB")
+                {
+                    DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
+                    flightDict.Add(flightNumber, newflight);
+                }
+                else if (type == "LWTT")
+                {
+                    LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
+                    flightDict.Add(flightNumber, newflight);
+                }
+                count++;
+            }
+        }
+    }
