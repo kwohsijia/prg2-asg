@@ -4,7 +4,14 @@ Dictionary<string, Airline> airlineDict = new Dictionary<string, Airline>();
 Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
 Dictionary<string, Flight> flightDict = new Dictionary<string, Flight>();
 int count = 0;
+int airlinecount = 0;
+int boardingcount = 0;
 LoadFlights();
+LoadFiles(airlineDict, boardinggateDict);
+Console.WriteLine("Loading Airlines...");
+Console.WriteLine($"{airlinecount} Airlines Loaded!");
+Console.WriteLine("Loading Boarding Gates...");
+Console.WriteLine($"{boardingcount} Boarding Gates Loaded!");
 Console.WriteLine("Loading Flights...");
 Console.WriteLine($"{count} Flights Loaded!");
 while (true)
@@ -51,6 +58,7 @@ void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string, Board
             string code = data[1];
             Airline newairline = new Airline(name, code);
             airlineDict.Add(name, newairline);
+            airlinecount++;
         }
     }
     using (StreamReader sr = new StreamReader("boardinggates.csv"))
@@ -64,14 +72,8 @@ void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string, Board
             string supportCFFT = data[2];
             string supportLWTT = data[3];
 
-            foreach (KeyValuePair<string, Airline> kvp in airlineDict)
-            {
-                foreach (KeyValuePair<string, Flight> kvp2 in kvp.Value.Flights)
-                {
-                    BoardingGate newboardinggate = new BoardingGate(gateName, Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportLWTT), kvp2.Value);
-                    boardinggateDict.Add(gateName, newboardinggate);
-                }
-            }
+
+          
 
         }
     }
