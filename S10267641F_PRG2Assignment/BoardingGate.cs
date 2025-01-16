@@ -19,13 +19,13 @@ namespace S10267641F_PRG2Assignment
         public bool SupportsLWTT { get; set; }
         public Flight Flight { get; set; }
 
-        public BoardingGate (string gateName, bool supportsCFFT, bool supportsDDJB, bool supportsLWTT, Flight flight)
+        public BoardingGate (string gateName, bool supportsCFFT, bool supportsDDJB, bool supportsLWTT)
         {
             GateName = gateName;
             SupportsCFFT = supportsCFFT;
             SupportsDDJB = supportsDDJB;
             SupportsLWTT = supportsLWTT;
-            Flight = flight;
+            
         }
 
         public double CalculateFees()

@@ -78,7 +78,7 @@ void LoadBoardingGate (Terminal t)
             string supportDDJB = data[1];
             string supportCFFT = data[2];
             string supportLWTT = data[3];
-            BoardingGate boardingGate = new BoardingGate(gateName, Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportLWTT), null);
+            BoardingGate boardingGate = new BoardingGate(gateName, Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportLWTT));
             t.BoardingGates.Add(gateName, boardingGate);
 
 
