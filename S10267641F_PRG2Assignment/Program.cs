@@ -102,20 +102,6 @@ void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this
 void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
 {
 
-    LoadFiles(airlineDict, boardinggateDict);
-
-    void ListBoardingGates(Dictionary<string, BoardingGate> boardinggateDict) //this is option 2 in the sample output
-    {
-        Console.WriteLine("=============================================");
-        Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
-        Console.WriteLine("=============================================");
-        Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
-        foreach (KeyValuePair<string, BoardingGate> kvp in boardinggateDict)
-        {
-            BoardingGate boardingGate = kvp.Value;
-            Console.WriteLine(boardingGate.ToString());
-        }
-    }
 }
 
 void LoadFlights()
