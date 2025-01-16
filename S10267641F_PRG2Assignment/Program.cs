@@ -101,7 +101,7 @@ void ListBoardingGates(Terminal t) //this is option 2 in the sample output
 }
 
 
-void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<string, BoardingGate> boardinggateDict) //this is option 5 in the sample output 
+void LoadFlights(Terminal t)
 {
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
@@ -132,5 +132,5 @@ void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<st
             flightCount++;
         }
     }
-    
+
 }
