@@ -1,4 +1,8 @@
-﻿using S10267641F_PRG2Assignment;
+﻿//==========================================================
+// Student Name	: Ian Tan Jun Yang (S10268190F)
+// Student Name	: Kwoh Si Jia (S10267641F)
+//==========================================================
+using S10267641F_PRG2Assignment;
 
 Dictionary<string, Airline> airlineDict = new Dictionary<string, Airline>();
 Dictionary<string, BoardingGate> boardinggateDict = new Dictionary<string, BoardingGate>();
@@ -113,14 +117,7 @@ void DisplayFlightDetails(Dictionary<string, Airline> airlineDict, Dictionary<st
         }
     }
 }
-    //==========================================================
-    // Student Number	: S10268190F
-    // Student Name	: Ian Tan Jun Yang
-    // Partner Name	: Kwoh Si Jia 
-    //==========================================================
 
-    //Basic Feature 2
-    void LoadFlights()
     {
         using (StreamReader sr = new StreamReader("flights.csv"))
         {
