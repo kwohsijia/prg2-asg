@@ -70,21 +70,7 @@ void LoadFiles(Dictionary<string, Airline> airlineDict, Dictionary<string,Boardi
             string supportCFFT = data[2];
             string supportLWTT = data[3];
 
-            //foreach (KeyValuePair<string, Airline> kvp in airlineDict)
-            //{
-            //    foreach(KeyValuePair<string, Flight> kvp2 in kvp.Value.Flights)
-            //    {
-            //        BoardingGate newboardinggate = new BoardingGate(gateName, Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportLWTT), kvp2.Value);
-            //        boardinggateDict.Add(gateName, newboardinggate);
-            //        boardingcount++;
-            //    }
-            //}
-            foreach (KeyValuePair<string, Airline> kvp in airlineDict)
-            {
-                BoardingGate newboardinggate = new BoardingGate(gateName, Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportLWTT), );
-                boardinggateDict.Add(gateName, newboardinggate);
-                boardingcount++;
-            }
+            
 
         }
     }
