@@ -60,7 +60,7 @@ void LoadAirline(Terminal t)
             string name = data[0];
             string code = data[1];
             Airline newairline = new Airline(name, code);
-            t.Airline.Add(name, newairline);
+            t.AddAirline(newairline);
             airlinecount++;
         }
     }
@@ -79,9 +79,8 @@ void LoadBoardingGate (Terminal t)
             string supportCFFT = data[2];
             string supportLWTT = data[3];
             BoardingGate boardingGate = new BoardingGate(gateName, Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportLWTT));
-            t.BoardingGates.Add(gateName, boardingGate);
-
-
+            t.AddBoardingGate(boardingGate);
+            boardingcount++;
         }
     }
 }
