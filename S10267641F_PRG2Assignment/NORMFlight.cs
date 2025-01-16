@@ -16,12 +16,11 @@ namespace S10267641F_PRG2Assignment
     class NORMFlight : Flight
     {
         public NORMFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "On Time")
-        : base(flightNumber, origin, destination, expectedTime, status)
-        { }
+        : base(flightNumber, origin, destination, expectedTime, status) { }
 
         public override double CalculateFees()
         {
-            double total;
+            double total = 0.0;
             if (Origin == "SIN")
             {
                 total = 500.00;
@@ -39,7 +38,7 @@ namespace S10267641F_PRG2Assignment
 
         public override string ToString()
         {
-            return base.ToString() + $", Fees: {CalculateFees():F2}";
+            return base.ToString() + $" Fees: {CalculateFees():F2}";
         }
     }
 }
