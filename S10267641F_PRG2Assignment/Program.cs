@@ -277,6 +277,40 @@ void AssignBoardingGate(Terminal t)
 
     Console.WriteLine("Enter Boarding Gate Name:");
     string gateName = Console.ReadLine();
+    BoardingGate selectedbg = null;
+    int i = 0;
+    while (true)
+    {
+
+        if (!t.BoardingGates.ContainsKey(gateName))
+        {
+            Console.WriteLine("Invalid Boarding Gate ID. Please try again.");
+            continue;
+        }
+
+        selectedbg = t.BoardingGates[gateName];
+        
+        if (selectedbg.Flight != null)
+        {
+            while (i < 1)
+            {
+                Console.WriteLine($"Boarding Gate {gateName} is already assigned to Flight {selectedbg.Flight.FlightNumber}. Please choose a different gate.");
+                break;
+            }
+            i++;
+            continue;
+        }
+
+        foreach (Flight f in t.Flights.Values)
+        {
+            selectedbg.Flight = f;
+            Console.WriteLine("Boarding Gate assigned successfully!");
+            Console.WriteLine($"Flight Number: {f.FlightNumber}");
+            Console.WriteLine($"Boarding Gate: {selectedbg.GateName}");
+            break;
+        }
+    }
+
     Console.WriteLine($"Flight Number: {flightNumber}");
     Flight flight = t.Flights[flightNumber];
     Console.WriteLine($"Origin: {flight.Origin}");
