@@ -50,6 +50,14 @@ while (true)
     {
         AssignBoardingGate(terminal);
     }
+    else if (option == 4)
+    {
+
+    }
+    else if (option == 5)
+    {
+        DisplayAirlineFlights(terminal);
+    }
 }
 
 void LoadAirline(Terminal t)
@@ -102,6 +110,42 @@ void ListBoardingGates(Terminal t) //this is option 2 in the sample output
     }
 }
 
+void DisplayAirlineFlights(Terminal t)
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+
+    Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}");
+    foreach(KeyValuePair<string, Airline> kvp in t.Airline)
+    {
+        Airline airline = kvp.Value;
+        Console.WriteLine(airline.ToString());
+    }
+    Console.Write("Enter Airline Code: ");
+    string? airlinecode = Console.ReadLine().ToUpper();
+    if (t.Airline.ContainsKey(airlinecode))
+    {
+        Airline airline = t.Airline[airlinecode];
+
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"List of Flights for {airline.Name}");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"{"Flight Number", -15}{"Airline Name", -23}{"Origin", -23}{"Destination", -23}Expected Departure/Arrival Time");
+
+        if (airline.Flights.Count == 0)
+        {
+            Console.WriteLine("There are no available flights for this airline.");
+        }
+        else
+        {
+            foreach (Flight f in airline.Flights.Values)
+            {
+                Console.WriteLine($"{f.FlightNumber,-15}{t.GetAirlineFromFlight(f).Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime}");
+            }
+        }
+    }
+}
 
 void LoadFlights(Terminal t)
 {

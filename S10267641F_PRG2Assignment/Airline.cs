@@ -59,7 +59,7 @@ namespace S10267641F_PRG2Assignment
         }
         public override string ToString()
         {
-            return $"Airline: {Name, -20} (Code: {Code, -8}), Total Flights: {Flights.Count}";
+            return $"{Code, -15}{Name, -20}";
         }
     }
 }

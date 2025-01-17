@@ -30,7 +30,7 @@ namespace S10267641F_PRG2Assignment
         
         public override string ToString()
         {
-            return $"{FlightNumber, -8} {Origin, -20} {Destination, -20} {ExpectedTime, -24} {Status, -12}"; 
+            return $"{FlightNumber, -15} {Origin, -23} {Destination, -23} {ExpectedTime, -10} {Status, -12}"; 
         }
 
         //we did the flight classes together in school on one laptop
