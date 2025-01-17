@@ -146,24 +146,18 @@ void DisplayAirlineFlights(Terminal t)
     //        }
     //    }
     //}
-    //test 
-    foreach (Flight f in t.Flights.Values)
+    foreach(Flight f in t.Flights.Values)
     {
         if (airlinecode == f.FlightNumber.Substring(0, 2))
         {
-
-
-            Console.WriteLine("There are no available flights for this airline.");
-
             i++;
-
         }
     }
-    
+
     if (i != 0)
     {
         Console.WriteLine("=============================================");
-        Console.WriteLine($"List of Flights for {t.Airline[airlinecode]}");
+        Console.WriteLine($"List of Flights for {t.Airline[airlinecode].Name}");
         Console.WriteLine("=============================================");
         Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}Expected Departure/Arrival Time");
         foreach (Flight f in t.Flights.Values)
@@ -172,7 +166,6 @@ void DisplayAirlineFlights(Terminal t)
                 Console.WriteLine($"{f.FlightNumber,-15}{t.GetAirlineFromFlight(f).Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime}");
         }
     }
-
     else
     {
         Console.WriteLine("There are no available flights for this airline.");
