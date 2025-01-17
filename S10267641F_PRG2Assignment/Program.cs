@@ -151,6 +151,7 @@ void DisplayAirlineFlights(Terminal t)
         if (airlinecode == f.FlightNumber.Substring(0, 2))
         {
 
+
             Console.WriteLine("There are no available flights for this airline.");
 
             i++;
@@ -170,7 +171,6 @@ void DisplayAirlineFlights(Terminal t)
                 Console.WriteLine($"{f.FlightNumber,-15}{t.GetAirlineFromFlight(f).Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime}");
         }
     }
-
     else
     {
         Console.WriteLine("There are no available flights for this airline.");
