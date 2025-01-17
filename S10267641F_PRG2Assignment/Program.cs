@@ -157,7 +157,7 @@ void DisplayAirlineFlights(Terminal t)
     if (i != 0)
     {
         Console.WriteLine("=============================================");
-        Console.WriteLine($"List of Flights for {t.Airline[airlinecode]}");
+        Console.WriteLine($"List of Flights for {t.Airline[airlinecode].Name}");
         Console.WriteLine("=============================================");
         Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}Expected Departure/Arrival Time");
         foreach (Flight f in t.Flights.Values)
