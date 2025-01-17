@@ -240,8 +240,41 @@ void ListFlights(Terminal t)
 void AssignBoardingGate(Terminal t)
 {
     Console.WriteLine("============================================\nAssign a Boarding Gate to a Flight\n============================================");
+
     Console.WriteLine("Enter Flight Number:");
     string flightNumber = Console.ReadLine();
+
+    foreach (Flight f in t.Flights.Values)
+    {
+        if (f.FlightNumber == flightNumber)
+        {
+            
+            Console.WriteLine($"Flight Information:");
+            Console.WriteLine($"Flight Number: {f.FlightNumber}");
+            Console.WriteLine($"Origin: {f.Origin}");
+            Console.WriteLine($"Destination: {f.Destination}");
+            Console.WriteLine($"Expected Departure/Arrival: {f.ExpectedTime}");
+
+            if (f is DDJBFlight)
+            {
+                Console.WriteLine($"Special Request Code: DDJB");
+            }
+            else if (f is CFFTFlight)
+            {
+                Console.WriteLine($"Special Request Code: CFFT");
+            }
+            else if (f is LWTTFlight)
+            {
+                Console.WriteLine($"Special Request Code: LWTT");
+            }
+            else
+            {
+                Console.WriteLine($"Special Request Code: None");
+            }
+            break;
+        }
+    }
+
     Console.WriteLine("Enter Boarding Gate Name:");
     string gateName = Console.ReadLine();
     Console.WriteLine($"Flight Number: {flightNumber}");
