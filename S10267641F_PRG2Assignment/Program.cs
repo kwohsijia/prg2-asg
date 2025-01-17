@@ -3,6 +3,7 @@
 // Student Name	: Kwoh Si Jia (S10267641F)
 //==========================================================
 using S10267641F_PRG2Assignment;
+using System.Diagnostics.Metrics;
 
 Terminal terminal = new Terminal("Terminal 5");
 int flightCount = 0;
@@ -112,19 +113,30 @@ void ListBoardingGates(Terminal t) //this is option 2 in the sample output
 
 void DisplayAirlineFlights(Terminal t)
 {
+    //list all the Airlines available
     Console.WriteLine("=============================================");
     Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
     Console.WriteLine("=============================================");
-
     Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}");
+
     foreach(KeyValuePair<string, Airline> kvp in t.Airline)
     {
         Airline airline = kvp.Value;
         Console.WriteLine(airline.ToString());
     }
-    Console.Write("Enter Airline Code: ");
+    
+    Console.Write("Enter Airline Code: ");//prompt the user to enter the 2 - Letter Airline Code(e.g.SQ or MH, etc.)
     string? airlinecode = Console.ReadLine().ToUpper();
+
+    //retrieve the Airline object selected
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"List of Flights for {t.Airline[airlinecode].Name}");
+    Console.WriteLine("=============================================");
+
+    //for each Flight from that Airline, show their Airline Number, Origin and Destination
     int i = 0;
+    int j = 0;
+
     foreach(Flight f in t.Flights.Values)
     {
         if (airlinecode == f.FlightNumber.Substring(0, 2))
@@ -135,9 +147,6 @@ void DisplayAirlineFlights(Terminal t)
 
     if (i != 0)
     {
-        Console.WriteLine("=============================================");
-        Console.WriteLine($"List of Flights for {t.Airline[airlinecode].Name}");
-        Console.WriteLine("=============================================");
         Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}Expected Departure/Arrival Time");
         foreach (Flight f in t.Flights.Values)
         {
@@ -149,7 +158,36 @@ void DisplayAirlineFlights(Terminal t)
     {
         Console.WriteLine("There are no available flights for this airline.");
     }
+
+    //prompt the user to select a Flight Number
+    Console.Write("Enter Flight Number: ");
+    string? flightno = Console.ReadLine().ToUpper();
+
+    //retrieve the Flight object selected
+    foreach (Flight f in t.Flights.Values)
+    {
+        if (flightno == f.FlightNumber)
+        {
+            i++;
+        }
+    }
+
+    if (i != 0)
+    {
+        Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}Expected Departure/Arrival Time");
+        foreach (Flight f in t.Flights.Values)
+        {
+            if (flightno == f.FlightNumber)
+                Console.WriteLine($"{f.FlightNumber,-15}{t.GetAirlineFromFlight(f).Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime}"); //havent do special req code and bg
+        }
+    }
+    else
+    {
+        Console.WriteLine("There are no available flights for this airline.");
+    }
 }
+
+
 
 void LoadFlights(Terminal t)
 {
