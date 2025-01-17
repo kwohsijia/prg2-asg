@@ -3,6 +3,7 @@
 // Student Name	: Kwoh Si Jia (S10267641F)
 //==========================================================
 using S10267641F_PRG2Assignment;
+using System.ComponentModel;
 using System.Diagnostics.Metrics;
 
 Terminal terminal = new Terminal("Terminal 5");
@@ -243,78 +244,83 @@ void AssignBoardingGate(Terminal t)
 
     Console.WriteLine("Enter Flight Number:");
     string flightNumber = Console.ReadLine();
-
-    foreach (Flight f in t.Flights.Values)
-    {
-        if (f.FlightNumber == flightNumber)
-        {
-            
-            Console.WriteLine($"Flight Information:");
-            Console.WriteLine($"Flight Number: {f.FlightNumber}");
-            Console.WriteLine($"Origin: {f.Origin}");
-            Console.WriteLine($"Destination: {f.Destination}");
-            Console.WriteLine($"Expected Departure/Arrival: {f.ExpectedTime}");
-
-            if (f is DDJBFlight)
-            {
-                Console.WriteLine($"Special Request Code: DDJB");
-            }
-            else if (f is CFFTFlight)
-            {
-                Console.WriteLine($"Special Request Code: CFFT");
-            }
-            else if (f is LWTTFlight)
-            {
-                Console.WriteLine($"Special Request Code: LWTT");
-            }
-            else
-            {
-                Console.WriteLine($"Special Request Code: None");
-            }
-            break;
-        }
-    }
-
     Console.WriteLine("Enter Boarding Gate Name:");
     string gateName = Console.ReadLine();
-    BoardingGate selectedbg = null;
-    int i = 0;
-    while (true)
+    if (t.BoardingGates.ContainsKey(gateName))
     {
-
-        if (!t.BoardingGates.ContainsKey(gateName))
-        {
-            Console.WriteLine("Invalid Boarding Gate ID. Please try again.");
-            continue;
-        }
-
-        selectedbg = t.BoardingGates[gateName];
-        
-        if (selectedbg.Flight != null)
-        {
-            while (i < 1)
-            {
-                Console.WriteLine($"Boarding Gate {gateName} is already assigned to Flight {selectedbg.Flight.FlightNumber}. Please choose a different gate.");
-                break;
-            }
-            i++;
-            continue;
-        }
-
+        Console.WriteLine("Boarding Gate has already been assigned.");
+    }
+    else
+    {
         foreach (Flight f in t.Flights.Values)
         {
-            selectedbg.Flight = f;
-            Console.WriteLine("Boarding Gate assigned successfully!");
-            Console.WriteLine($"Flight Number: {f.FlightNumber}");
-            Console.WriteLine($"Boarding Gate: {selectedbg.GateName}");
-            break;
+            if (f.FlightNumber == flightNumber)
+            {
+                Console.WriteLine($"Flight Number: {f.FlightNumber}");
+                Console.WriteLine($"Origin: {f.Origin}");
+                Console.WriteLine($"Destination: {f.Destination}");
+                Console.WriteLine($"Expected Departure/Arrival: {f.ExpectedTime}");
+
+                if (f is DDJBFlight)
+                {
+                    Console.WriteLine($"Special Request Code: DDJB");
+                }
+                else if (f is CFFTFlight)
+                {
+                    Console.WriteLine($"Special Request Code: CFFT");
+                }
+                else if (f is LWTTFlight)
+                {
+                    Console.WriteLine($"Special Request Code: LWTT");
+                }
+                else
+                {
+                    Console.WriteLine($"Special Request Code: None");
+                }
+                break;
+            }
         }
     }
-
-    Console.WriteLine($"Flight Number: {flightNumber}");
-    Flight flight = t.Flights[flightNumber];
-    Console.WriteLine($"Origin: {flight.Origin}");
-    Console.WriteLine($"Destination: {flight.Destination}");
-    Console.WriteLine($"Expected Time: {flight.ExpectedTime}");
-    
 }
+
+    //Console.WriteLine("Enter Boarding Gate Name:");
+    //string gateName = Console.ReadLine();
+    //BoardingGate selectedbg = null;
+    //int i = 0;
+    //while (true)
+    //{
+
+    //    if (!t.BoardingGates.ContainsKey(gateName))
+    //    {
+    //        Console.WriteLine("Invalid Boarding Gate ID. Please try again.");
+    //        continue;
+    //    }
+
+    //    selectedbg = t.BoardingGates[gateName];
+        
+    //    if (selectedbg.Flight != null)
+    //    {
+    //        while (i < 1)
+    //        {
+    //            Console.WriteLine($"Boarding Gate {gateName} is already assigned to Flight {selectedbg.Flight.FlightNumber}. Please choose a different gate.");
+    //            break;
+    //        }
+    //        i++;
+    //        continue;
+    //    }
+
+    //    foreach (Flight f in t.Flights.Values)
+    //    {
+    //        selectedbg.Flight = f;
+    //        Console.WriteLine("Boarding Gate assigned successfully!");
+    //        Console.WriteLine($"Flight Number: {f.FlightNumber}");
+    //        Console.WriteLine($"Boarding Gate: {selectedbg.GateName}");
+    //        break;
+    //    }
+    //}
+
+    //Console.WriteLine($"Flight Number: {flightNumber}");
+    //Flight flight = t.Flights[flightNumber];
+    //Console.WriteLine($"Origin: {flight.Origin}");
+    //Console.WriteLine($"Destination: {flight.Destination}");
+    //Console.WriteLine($"Expected Time: {flight.ExpectedTime}");
