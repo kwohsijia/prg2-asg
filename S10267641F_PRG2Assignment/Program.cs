@@ -135,6 +135,7 @@ void DisplayAirlineFlights(Terminal t)
 
         if (airline.Flights.Count == 0)
         {
+
             Console.WriteLine("There are no available flights for this airline.");
         }
         else
@@ -145,6 +146,7 @@ void DisplayAirlineFlights(Terminal t)
             }
         }
     }
+
 }
 
 void LoadFlights(Terminal t)
