@@ -67,9 +67,11 @@ while (true)
     }
 }
 
+//Basic Feature 1: Load files (airlines and boarding gates)
 void LoadAirline(Terminal t)
 {
     int airlinecount = 0;
+    //Load the airlines.csv file
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
         string? s = sr.ReadLine();
@@ -78,7 +80,9 @@ void LoadAirline(Terminal t)
             string[] data = s.Split(',');
             string name = data[0];
             string code = data[1];
+            //Create airline object
             Airline newairline = new Airline(name, code);
+            //Add airline object
             t.AddAirline(newairline);
             airlinecount++;
         }
@@ -90,6 +94,7 @@ void LoadAirline(Terminal t)
 void LoadBoardingGate (Terminal t)
 {
     int boardingcount = 0;
+    //Load the boardinggates.csv file
     using (StreamReader sr = new StreamReader("boardinggates.csv"))
     {
         string? s = sr.ReadLine();
@@ -100,7 +105,9 @@ void LoadBoardingGate (Terminal t)
             string supportDDJB = data[1];
             string supportCFFT = data[2];
             string supportLWTT = data[3];
+            //Create boarding gate objects
             BoardingGate boardingGate = new BoardingGate(gateName, Convert.ToBoolean(supportCFFT), Convert.ToBoolean(supportDDJB), Convert.ToBoolean(supportLWTT));
+            ////Add boarding gate objects
             t.AddBoardingGate(boardingGate);
             boardingcount++;
         }
@@ -109,136 +116,11 @@ void LoadBoardingGate (Terminal t)
     }
 }
 
-
-void ListBoardingGates(Terminal t) //this is option 2 in the sample output
-{
-    Console.WriteLine("=============================================");
-    Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
-    Console.WriteLine("=============================================");
-    Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
-    foreach (KeyValuePair<string, BoardingGate> kvp in t.BoardingGates)
-    {
-        BoardingGate boardingGate = kvp.Value;
-        Console.WriteLine(boardingGate.ToString());
-    }
-}
-
-void DisplayAirlineFlights(Terminal t)
-{
-    //list all the Airlines available
-    Console.WriteLine("=============================================");
-    Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
-    Console.WriteLine("=============================================");
-    Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}");
-
-    foreach(KeyValuePair<string, Airline> kvp in t.Airline)
-    {
-        Airline airline = kvp.Value;
-        Console.WriteLine(airline.ToString());
-    }
-    
-    Console.Write("Enter Airline Code: ");//prompt the user to enter the 2 - Letter Airline Code(e.g.SQ or MH, etc.)
-    string? airlinecode = Console.ReadLine().ToUpper();
-
-    //retrieve the Airline object selected
-    Console.WriteLine("=============================================");
-    Console.WriteLine($"List of Flights for {t.Airline[airlinecode].Name}");
-    Console.WriteLine("=============================================");
-
-    //for each Flight from that Airline, show their Airline Number, Origin and Destination
-    int i = 0;
-    int j = 0;
-
-    foreach(Flight flight in t.Flights.Values)
-    {
-        if (airlinecode == flight.FlightNumber.Substring(0, 2))
-        {
-            i++;
-        }
-    }
-
-    if (i != 0)
-    {
-        Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}Expected Departure/Arrival Time");
-        foreach (Flight flight in t.Flights.Values)
-        {
-            if (airlinecode == flight.FlightNumber.Substring(0, 2))
-                Console.WriteLine($"{flight.FlightNumber,-15}{t.GetAirlineFromFlight(flight).Name,-23}{flight.Origin,-23}{flight.Destination,-23}{flight.ExpectedTime}");
-        }
-    }
-    else
-    {
-        Console.WriteLine("There are no available flights for this airline.");
-    }
-
-    //prompt the user to select a Flight Number
-    Console.Write("Enter Flight Number: ");
-    string? flightno = Console.ReadLine().ToUpper();
-
-    //retrieve the Flight object selected
-    Flight f = t.Flights[flightno];
-
-    foreach (Flight flight in t.Flights.Values)
-    {
-        if (flightno == flight.FlightNumber)
-        {
-            i++;
-        }
-    }
-   
-        
-    if (i != 0)
-    {
-        Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Expected Departure/Arrival Time", -33}{"Special Request Code", -23}Assigned Baording Gate");
-        foreach (Flight flight in t.Flights.Values)
-        {
-            if (flight.FlightNumber == flightno)
-            {
-                // Determine the special request code
-                string specialreq = "";
-
-                if (flight is DDJBFlight)
-                {
-                    specialreq = "DDJB";
-                }
-
-                else if (flight is CFFTFlight)
-                {
-                    specialreq = "CFFT";
-                }
-                else if (flight is LWTTFlight)
-                {
-                    specialreq = "LWTT";
-                }
-
-                //Determine Boarding Gate 
-                string boardingGate = "Not Assigned";
-
-                foreach (var gate in assignGateDict)
-                {
-                    if (gate.Value == flight.FlightNumber)
-                    {
-                        boardingGate = gate.Key; // Assign the gate name
-                        break; // Exit the loop once the gate is found
-                    }
-                } 
-
-                // Output the flight details
-                Console.WriteLine($"{flight.FlightNumber,-15}{t.GetAirlineFromFlight(flight).Name,-23}{flight.Origin,-23}{flight.Destination,-23}{flight.ExpectedTime,-33}{specialreq,-23}{boardingGate}");
-            }
-        }
-    }
-    else
-    {
-        Console.WriteLine("There are no available flights for this airline.");
-    }
-}
-
-
-
-void LoadFlights(Terminal t) // Basic Feature 2
+//Basic Feature 2: Load files (flights)
+void LoadFlights(Terminal t)
 {
     int flightCount = 0;
+    //Load flights.csv file
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
         string s = sr.ReadLine();
@@ -250,6 +132,7 @@ void LoadFlights(Terminal t) // Basic Feature 2
             string destination = data[2];
             DateTime expectedTime = DateTime.Parse(data[3]);
             string type = data[4];
+            //create flight objects and add into dictionary
             if (type == "CFFT")
             {
                 CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
@@ -277,6 +160,7 @@ void LoadFlights(Terminal t) // Basic Feature 2
     }
 }
 
+//Basic Feature 3: List all flights with their basic information
 void ListFlights(Terminal t)
 {
     Console.WriteLine("=============================================\nList of Flights for Changi Airport Terminal 5\n=============================================");
@@ -287,6 +171,21 @@ void ListFlights(Terminal t)
     }
 }
 
+//Basic Feature 4: List all boarding gates
+void ListBoardingGates(Terminal t) 
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
+    foreach (KeyValuePair<string, BoardingGate> kvp in t.BoardingGates)
+    {
+        BoardingGate boardingGate = kvp.Value;
+        Console.WriteLine(boardingGate.ToString());
+    }
+}
+
+//Basic Feature 5: Assign a boarding gate to a flight
 void AssignBoardingGate(Terminal t) // Basic feature 5
 {
     Console.WriteLine("============================================\nAssign a Boarding Gate to a Flight\n============================================");
@@ -416,9 +315,9 @@ void AssignBoardingGate(Terminal t) // Basic feature 5
         }
     }
 }
-        
 
-void CreateFlight(Terminal t) // Basic feature 6
+//Basic feature 6: Create a new flight
+void CreateFlight(Terminal t) 
 {
     while (true)
     {
@@ -475,8 +374,120 @@ void CreateFlight(Terminal t) // Basic feature 6
             continue;
     }
 }
+//Basic feature 7: Display full flight details from an airline
+void DisplayAirlineFlights(Terminal t)
+{
+    //list all the Airlines available
+    Console.WriteLine("=============================================");
+    Console.WriteLine("List of Airlines for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}");
 
-void DisplayFlightDetails(Terminal t) // Basic Feature 9
+    foreach(KeyValuePair<string, Airline> kvp in t.Airline)
+    {
+        Airline airline = kvp.Value;
+        Console.WriteLine(airline.ToString());
+    }
+    
+    Console.Write("Enter Airline Code: ");//prompt the user to enter the 2 - Letter Airline Code(e.g.SQ or MH, etc.)
+    string? airlinecode = Console.ReadLine().ToUpper();
+
+    //retrieve the Airline object selected
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"List of Flights for {t.Airline[airlinecode].Name}");
+    Console.WriteLine("=============================================");
+
+    //for each Flight from that Airline, show their Airline Number, Origin and Destination
+    int i = 0;
+    int j = 0;
+
+    foreach(Flight flight in t.Flights.Values)
+    {
+        if (airlinecode == flight.FlightNumber.Substring(0, 2))
+        {
+            i++;
+        }
+    }
+
+    if (i != 0)
+    {
+        Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}Expected Departure/Arrival Time");
+        foreach (Flight flight in t.Flights.Values)
+        {
+            if (airlinecode == flight.FlightNumber.Substring(0, 2))
+                Console.WriteLine($"{flight.FlightNumber,-15}{t.GetAirlineFromFlight(flight).Name,-23}{flight.Origin,-23}{flight.Destination,-23}{flight.ExpectedTime}");
+        }
+    }
+    else
+    {
+        Console.WriteLine("There are no available flights for this airline.");
+    }
+
+    //prompt the user to select a Flight Number
+    Console.Write("Enter Flight Number: ");
+    string? flightno = Console.ReadLine().ToUpper();
+
+    //retrieve the Flight object selected
+    Flight f = t.Flights[flightno];
+
+    foreach (Flight flight in t.Flights.Values)
+    {
+        if (flightno == flight.FlightNumber)
+        {
+            i++;
+        }
+    }
+   
+        
+    if (i != 0)
+    {
+        Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Expected Departure/Arrival Time", -33}{"Special Request Code", -23}Assigned Baording Gate");
+        foreach (Flight flight in t.Flights.Values)
+        {
+            if (flight.FlightNumber == flightno)
+            {
+                // Determine the special request code
+                string specialreq = "";
+
+                if (flight is DDJBFlight)
+                {
+                    specialreq = "DDJB";
+                }
+
+                else if (flight is CFFTFlight)
+                {
+                    specialreq = "CFFT";
+                }
+                else if (flight is LWTTFlight)
+                {
+                    specialreq = "LWTT";
+                }
+
+                //Determine Boarding Gate 
+                string boardingGate = "Not Assigned";
+
+                foreach (var gate in assignGateDict)
+                {
+                    if (gate.Value == flight.FlightNumber)
+                    {
+                        boardingGate = gate.Key; // Assign the gate name
+                        break; // Exit the loop once the gate is found
+                    }
+                } 
+
+                // Output the flight details
+                Console.WriteLine($"{flight.FlightNumber,-15}{t.GetAirlineFromFlight(flight).Name,-23}{flight.Origin,-23}{flight.Destination,-23}{flight.ExpectedTime,-33}{specialreq,-23}{boardingGate}");
+            }
+        }
+    }
+    else
+    {
+        Console.WriteLine("There are no available flights for this airline.");
+    }
+}
+
+//Basic Feature 9: Display scheduled flights in chronological order, with boarding gates assignments where applicable
+void DisplayFlightDetails(Terminal t)
 {
     Console.WriteLine("=============================================\nFlight Schedule for Changi Airport Terminal 5\n=============================================");
     Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10} {5,-10} {6, -15}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate");
