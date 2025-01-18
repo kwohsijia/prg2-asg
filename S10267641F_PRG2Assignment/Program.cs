@@ -12,6 +12,8 @@ LoadAirline(terminal);
 LoadBoardingGate(terminal);
 LoadFlights(terminal);
 Dictionary<string, string> assignGateDict = new Dictionary<string, string>();
+
+//Main program
 while (true)
 {
     Console.WriteLine("=============================================");
@@ -55,7 +57,7 @@ while (true)
     }
     else if (option == 6)
     {
-
+        ModifyFlightDeatils(terminal);
     }
     else if (option == 7)
     {
@@ -375,7 +377,7 @@ void CreateFlight(Terminal t)
     }
 }
 //Basic feature 7: Display full flight details from an airline
-void DisplayAirlineFlights(Terminal t)
+void DisplayAirlinefromCode (Terminal t)
 {
     //list all the Airlines available
     Console.WriteLine("=============================================");
@@ -383,12 +385,12 @@ void DisplayAirlineFlights(Terminal t)
     Console.WriteLine("=============================================");
     Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}");
 
-    foreach(KeyValuePair<string, Airline> kvp in t.Airline)
+    foreach (KeyValuePair<string, Airline> kvp in t.Airline)
     {
         Airline airline = kvp.Value;
         Console.WriteLine(airline.ToString());
     }
-    
+
     Console.Write("Enter Airline Code: ");//prompt the user to enter the 2 - Letter Airline Code(e.g.SQ or MH, etc.)
     string? airlinecode = Console.ReadLine().ToUpper();
 
@@ -399,9 +401,7 @@ void DisplayAirlineFlights(Terminal t)
 
     //for each Flight from that Airline, show their Airline Number, Origin and Destination
     int i = 0;
-    int j = 0;
-
-    foreach(Flight flight in t.Flights.Values)
+    foreach (Flight flight in t.Flights.Values)
     {
         if (airlinecode == flight.FlightNumber.Substring(0, 2))
         {
@@ -422,7 +422,11 @@ void DisplayAirlineFlights(Terminal t)
     {
         Console.WriteLine("There are no available flights for this airline.");
     }
-
+}
+void DisplayAirlineFlights(Terminal t)
+{
+    DisplayAirlinefromCode(t);
+    int i = 0;
     //prompt the user to select a Flight Number
     Console.Write("Enter Flight Number: ");
     string? flightno = Console.ReadLine().ToUpper();
@@ -485,7 +489,39 @@ void DisplayAirlineFlights(Terminal t)
         Console.WriteLine("There are no available flights for this airline.");
     }
 }
+//Basic Feature 8: Modify Flight Details
+void ModifyFlightDeatils(Terminal t)
+{
+    DisplayAirlinefromCode(t);
 
+    Console.Write("Choose an existing Flight to modify or delete:  ");
+    string flightName = Console.ReadLine().ToUpper();
+    Console.WriteLine("1. Modify Flight");
+    Console.WriteLine("2. Delete Flight");
+    Console.WriteLine("Choose an option: ");
+    int option = Convert.ToInt32(Console.ReadLine());
+    if (option == 1)
+    {
+        Console.WriteLine("Choose an option to modify:");
+        Console.WriteLine("1. Modify Origin/Destination/Expected Time");
+        Console.WriteLine("2. Modify Flight Status");
+        Console.WriteLine("3. Modify Special Request Code");
+        Console.WriteLine("4. Modify Boarding Gate");
+        Console.Write("Enter your choice: ");
+        int ModifyOption = Convert.ToInt32(Console.ReadLine());
+        if (ModifyOption == 1)
+        {
+            Console.Write("Enter new Origin: ");
+            string newOrigin = Console.ReadLine();
+            Console.Write("Enter new Destination: ");
+            string newDestination = Console.ReadLine();
+            Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+            string time = Console.ReadLine();
+            
+        }
+    }
+
+}
 //Basic Feature 9: Display scheduled flights in chronological order, with boarding gates assignments where applicable
 void DisplayFlightDetails(Terminal t)
 {
