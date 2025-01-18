@@ -3,22 +3,14 @@
 // Student Name	: Kwoh Si Jia (S10267641F)
 //==========================================================
 using S10267641F_PRG2Assignment;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics.Metrics;
 
 Terminal terminal = new Terminal("Terminal 5");
-int flightCount = 0;
-int airlinecount = 0;
-int boardingcount = 0;
-LoadFlights(terminal);
 LoadAirline(terminal);
 LoadBoardingGate(terminal);
-Console.WriteLine("Loading Airlines...");
-Console.WriteLine($"{airlinecount} Airlines Loaded!");
-Console.WriteLine("Loading Boarding Gates...");
-Console.WriteLine($"{boardingcount} Boarding Gates Loaded!");
-Console.WriteLine("Loading Flights...");
-Console.WriteLine($"{flightCount} Flights Loaded!");
+LoadFlights(terminal);
 Dictionary<string, string> assignGateDict = new Dictionary<string, string>();
 while (true)
 {
@@ -61,10 +53,23 @@ while (true)
     {
         DisplayAirlineFlights(terminal);
     }
+    else if (option == 6)
+    {
+
+    }
+    else if (option == 7)
+    {
+        DisplayFlightDetails(terminal);
+    }
+    else
+    {
+        Console.WriteLine("Invalid option. Please try again.");
+    }
 }
 
 void LoadAirline(Terminal t)
 {
+    int airlinecount = 0;
     using (StreamReader sr = new StreamReader("airlines.csv"))
     {
         string? s = sr.ReadLine();
@@ -77,11 +82,14 @@ void LoadAirline(Terminal t)
             t.AddAirline(newairline);
             airlinecount++;
         }
+        Console.WriteLine("Loading Airlines...");
+        Console.WriteLine($"{airlinecount} Airlines Loaded!");
     }
 }
 
 void LoadBoardingGate (Terminal t)
 {
+    int boardingcount = 0;
     using (StreamReader sr = new StreamReader("boardinggates.csv"))
     {
         string? s = sr.ReadLine();
@@ -96,6 +104,8 @@ void LoadBoardingGate (Terminal t)
             t.AddBoardingGate(boardingGate);
             boardingcount++;
         }
+        Console.WriteLine("Loading Boarding Gates...");
+        Console.WriteLine($"{boardingcount} Boarding Gates Loaded!");
     }
 }
 
@@ -191,8 +201,9 @@ void DisplayAirlineFlights(Terminal t)
 
 
 
-void LoadFlights(Terminal t)
+void LoadFlights(Terminal t) // Basic Feature 2
 {
+    int flightCount = 0;
     using (StreamReader sr = new StreamReader("flights.csv"))
     {
         string s = sr.ReadLine();
@@ -226,6 +237,8 @@ void LoadFlights(Terminal t)
             }
             flightCount++;
         }
+        Console.WriteLine("Loading Flights...");
+        Console.WriteLine($"{flightCount} Flights Loaded!");
     }
 }
 
@@ -239,9 +252,15 @@ void ListFlights(Terminal t)
     }
 }
 
-void AssignBoardingGate(Terminal t)
+void AssignBoardingGate(Terminal t) // Basic feature 5
 {
     Console.WriteLine("============================================\nAssign a Boarding Gate to a Flight\n============================================");
+    List<string> CFFTGateList = new List<string>();
+    List<string> DDJBGateList = new List<string>();
+    List<string> LWTTGateList = new List<string>();
+    CFFTGateList = ["B1", "B2", "B3", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14", "C15", "C16", "C17", "C18", "C19", "C20", "C21", "C22"];
+    DDJBGateList = ["A10", "A11", "A12", "A13", "A20", "A21", "A22", "B10", "B11", "B12"];
+    LWTTGateList = ["A1", "A2", "A20", "A21", "C14", "C15", "C16", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12", "B13", "B14", "B15", "B16", "B17", "B18", "B19", "B20", "B21", "B22"];
     while (true)
     {
         Console.WriteLine("Enter Flight Number:");
@@ -251,11 +270,57 @@ void AssignBoardingGate(Terminal t)
         if (assignGateDict.ContainsKey(gateName))
         {
             Console.WriteLine("Boarding Gate has already been assigned. Please try a different boarding gate.");
-            continue;
         }
+
         else
         {
-            foreach (Flight f in t.Flights.Values)
+            bool isEligible = false;
+            Flight f = t.Flights[flightNumber];
+            if (f.FlightNumber == flightNumber)
+            {
+                if (f is DDJBFlight)
+                {
+                    if (!DDJBGateList.Contains(gateName))
+                    {
+                        Console.WriteLine("Boarding Gate does not support DDJB. Please try a different boarding gate.");
+                        continue;
+                    }
+                    else
+                    {
+                        isEligible = true;
+                    }
+                }
+                else if (f is CFFTFlight)
+                {
+                    if (!CFFTGateList.Contains(gateName))
+                    {
+                        Console.WriteLine("Boarding Gate does not support CFFT. Please try a different boarding gate.");
+                        continue;
+                    }
+                    else
+                    {
+                        isEligible = true;
+                    }
+                }
+                else if (f is LWTTFlight)
+                {
+                    if (!LWTTGateList.Contains(gateName))
+                    {
+                        Console.WriteLine("Boarding Gate does not support LWTT. Please try a different boarding gate.");
+                        continue;
+                    }
+                    else
+                    {
+                        isEligible = true;
+                    }
+                }
+                else
+                {
+                    isEligible = true;
+                }
+            }
+
+            if (isEligible)
             {
                 if (f.FlightNumber == flightNumber)
                 {
@@ -304,21 +369,21 @@ void AssignBoardingGate(Terminal t)
                             f.Status = "On Time";
                         }
                         Console.WriteLine($"Flight {flightNumber} has been assigned to Boarding Gate {gateName}!");
+                        break;
                     }
                     else
                     {
                         Console.WriteLine($"Flight {flightNumber} has been assigned to Boarding Gate {gateName}!");
                         break;
                     }
-                    break;
                 }
             }
         }
-        break;
     }
 }
+        
 
-void CreateFlight(Terminal t)
+void CreateFlight(Terminal t) // Basic feature 6
 {
     while (true)
     {
@@ -374,4 +439,10 @@ void CreateFlight(Terminal t)
         else
             continue;
     }
+}
+
+void DisplayFlightDetails(Terminal t) // Basic Feature 9
+{
+    Console.WriteLine("=============================================\nFlight Schedule for Changi Airport Terminal 5\n=============================================");
+    Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10} {5,-10} {6, -15}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate");
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 //==========================================================
 namespace S10267641F_PRG2Assignment
 {
-    abstract class Flight
+    abstract class Flight : IComparable<Flight>
     {
         public string FlightNumber {  get; set; }   
         public string Origin { get; set; }
@@ -26,13 +26,30 @@ namespace S10267641F_PRG2Assignment
             ExpectedTime = expectedTime;
             Status = status;
         }
-        public abstract double CalculateFees();
-        
+        public virtual double CalculateFees()
+        {
+            double baseFee = 0.0;
+            if (Destination == "Singapore (SIN)")
+            {
+                baseFee = 500.0;
+            }
+            else if (Origin == "Singapore (SIN)")
+            {
+                baseFee = 800.0;
+            }
+            return baseFee;
+        }
+
+
         public override string ToString()
         {
             return $"{FlightNumber, -15} {Origin, -23} {Destination, -23} {ExpectedTime, -10} {Status, -12}"; 
         }
 
+        public int CompareTo(Flight other)
+        {
+            return this.ExpectedTime.CompareTo(other.ExpectedTime);
+        }
         //we did the flight classes together in school on one laptop
     }
 }

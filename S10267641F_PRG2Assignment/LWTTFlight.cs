@@ -27,20 +27,7 @@ namespace S10267641F_PRG2Assignment
 
         public override double CalculateFees()
         {
-            double total;
-            if (Origin == "Singapore (SIN)")
-            {
-                total = 500.00 + 500.00;
-            }
-            else if (Destination == "Singapore (SIN)")
-            {
-                total = 800.00 + 500.00;
-            }
-            else
-            {
-                total = 500.00;
-            }
-            return total;
+            return base.CalculateFees() + RequestFee;
         }
 
         public override string ToString()
