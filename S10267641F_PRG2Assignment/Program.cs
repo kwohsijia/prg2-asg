@@ -55,7 +55,7 @@ while (true)
     }
     else if (option == 4)
     {
-
+        CreateFlight(terminal);
     }
     else if (option == 5)
     {
@@ -315,5 +315,51 @@ void AssignBoardingGate(Terminal t)
             }
         }
         break;
+    }
+}
+
+void CreateFlight(Terminal t)
+{
+    Console.Write("Enter Flight Number: ");
+    string newFlightNumber = Console.ReadLine();
+    Console.Write("Enter Origin: ");
+    string newOrigin = Console.ReadLine();
+    Console.Write("Enter Destination: ");
+    string newDestination = Console.ReadLine();
+    Console.Write("Enter Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+    DateTime newExpectedTime = DateTime.Parse(Console.ReadLine());
+    Console.Write("Enter Special Request Code (CFFT/DDJB/LWTT/None): ");
+    string newType = Console.ReadLine().ToUpper();
+    if (newType == "CFFT")
+    {
+        t.Flights.Add(newFlightNumber, new CFFTFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
+        using (StreamWriter sw = new StreamWriter("flights.csv", true))
+        {
+            sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},{newType}");
+        }
+    }
+    else if (newType == "DDJB")
+    {
+        t.Flights.Add(newFlightNumber, new DDJBFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
+        using (StreamWriter sw = new StreamWriter("flights.csv", true))
+        {
+            sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},{newType}");
+        }
+    }
+    else if (newType == "LWTT")
+    {
+        t.Flights.Add(newFlightNumber, new LWTTFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
+        using (StreamWriter sw = new StreamWriter("flights.csv", true))
+        {
+            sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},{newType}");
+        }
+    }
+    else
+    {
+        t.Flights.Add(newFlightNumber, new NORMFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
+        using (StreamWriter sw = new StreamWriter("flights.csv", true))
+        {
+            sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},");
+        }
     }
 }
