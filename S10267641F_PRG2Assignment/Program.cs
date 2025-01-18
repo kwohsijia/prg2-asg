@@ -149,9 +149,9 @@ void DisplayAirlineFlights(Terminal t)
     int i = 0;
     int j = 0;
 
-    foreach(Flight f in t.Flights.Values)
+    foreach(Flight flight in t.Flights.Values)
     {
-        if (airlinecode == f.FlightNumber.Substring(0, 2))
+        if (airlinecode == flight.FlightNumber.Substring(0, 2))
         {
             i++;
         }
@@ -160,10 +160,10 @@ void DisplayAirlineFlights(Terminal t)
     if (i != 0)
     {
         Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}Expected Departure/Arrival Time");
-        foreach (Flight f in t.Flights.Values)
+        foreach (Flight flight in t.Flights.Values)
         {
-            if (airlinecode == f.FlightNumber.Substring(0, 2))
-                Console.WriteLine($"{f.FlightNumber,-15}{t.GetAirlineFromFlight(f).Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime}");
+            if (airlinecode == flight.FlightNumber.Substring(0, 2))
+                Console.WriteLine($"{flight.FlightNumber,-15}{t.GetAirlineFromFlight(flight).Name,-23}{flight.Origin,-23}{flight.Destination,-23}{flight.ExpectedTime}");
         }
     }
     else
@@ -176,21 +176,56 @@ void DisplayAirlineFlights(Terminal t)
     string? flightno = Console.ReadLine().ToUpper();
 
     //retrieve the Flight object selected
-    foreach (Flight f in t.Flights.Values)
+    Flight f = t.Flights[flightno];
+
+    foreach (Flight flight in t.Flights.Values)
     {
-        if (flightno == f.FlightNumber)
+        if (flightno == flight.FlightNumber)
         {
             i++;
         }
     }
-
+   
+        
     if (i != 0)
     {
-        Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}Expected Departure/Arrival Time");
-        foreach (Flight f in t.Flights.Values)
+        Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Expected Departure/Arrival Time", -33}{"Special Request Code", -23}Assigned Baording Gate");
+        foreach (Flight flight in t.Flights.Values)
         {
-            if (flightno == f.FlightNumber)
-                Console.WriteLine($"{f.FlightNumber,-15}{t.GetAirlineFromFlight(f).Name,-23}{f.Origin,-23}{f.Destination,-23}{f.ExpectedTime}"); //havent do special req code and bg
+            if (flight.FlightNumber == flightno)
+            {
+                // Determine the special request code
+                string specialreq = "";
+
+                if (flight is DDJBFlight)
+                {
+                    specialreq = "DDJB";
+                }
+
+                else if (flight is CFFTFlight)
+                {
+                    specialreq = "CFFT";
+                }
+                else if (flight is LWTTFlight)
+                {
+                    specialreq = "LWTT";
+                }
+
+                //Determine Boarding Gate 
+                string boardingGate = "Not Assigned";
+
+                foreach (var gate in assignGateDict)
+                {
+                    if (gate.Value == flight.FlightNumber)
+                    {
+                        boardingGate = gate.Key; // Assign the gate name
+                        break; // Exit the loop once the gate is found
+                    }
+                } 
+
+                // Output the flight details
+                Console.WriteLine($"{flight.FlightNumber,-15}{t.GetAirlineFromFlight(flight).Name,-23}{flight.Origin,-23}{flight.Destination,-23}{flight.ExpectedTime,-33}{specialreq,-23}{boardingGate}");
+            }
         }
     }
     else
