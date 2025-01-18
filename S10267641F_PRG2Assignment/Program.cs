@@ -320,46 +320,58 @@ void AssignBoardingGate(Terminal t)
 
 void CreateFlight(Terminal t)
 {
-    Console.Write("Enter Flight Number: ");
-    string newFlightNumber = Console.ReadLine();
-    Console.Write("Enter Origin: ");
-    string newOrigin = Console.ReadLine();
-    Console.Write("Enter Destination: ");
-    string newDestination = Console.ReadLine();
-    Console.Write("Enter Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
-    DateTime newExpectedTime = DateTime.Parse(Console.ReadLine());
-    Console.Write("Enter Special Request Code (CFFT/DDJB/LWTT/None): ");
-    string newType = Console.ReadLine().ToUpper();
-    if (newType == "CFFT")
+    while (true)
     {
-        t.Flights.Add(newFlightNumber, new CFFTFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
-        using (StreamWriter sw = new StreamWriter("flights.csv", true))
+        Console.Write("Enter Flight Number: ");
+        string newFlightNumber = Console.ReadLine();
+        Console.Write("Enter Origin: ");
+        string newOrigin = Console.ReadLine();
+        Console.Write("Enter Destination: ");
+        string newDestination = Console.ReadLine();
+        Console.Write("Enter Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+        DateTime newExpectedTime = DateTime.Parse(Console.ReadLine());
+        Console.Write("Enter Special Request Code (CFFT/DDJB/LWTT/None): ");
+        string newType = Console.ReadLine().ToUpper();
+        if (newType == "CFFT")
         {
-            sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},{newType}");
+            t.Flights.Add(newFlightNumber, new CFFTFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
+            using (StreamWriter sw = new StreamWriter("flights.csv", true))
+            {
+                sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},{newType}");
+            }
         }
-    }
-    else if (newType == "DDJB")
-    {
-        t.Flights.Add(newFlightNumber, new DDJBFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
-        using (StreamWriter sw = new StreamWriter("flights.csv", true))
+        else if (newType == "DDJB")
         {
-            sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},{newType}");
+            t.Flights.Add(newFlightNumber, new DDJBFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
+            using (StreamWriter sw = new StreamWriter("flights.csv", true))
+            {
+                sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},{newType}");
+            }
         }
-    }
-    else if (newType == "LWTT")
-    {
-        t.Flights.Add(newFlightNumber, new LWTTFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
-        using (StreamWriter sw = new StreamWriter("flights.csv", true))
+        else if (newType == "LWTT")
         {
-            sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},{newType}");
+            t.Flights.Add(newFlightNumber, new LWTTFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
+            using (StreamWriter sw = new StreamWriter("flights.csv", true))
+            {
+                sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},{newType}");
+            }
         }
-    }
-    else
-    {
-        t.Flights.Add(newFlightNumber, new NORMFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
-        using (StreamWriter sw = new StreamWriter("flights.csv", true))
+        else
         {
-            sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},");
+            t.Flights.Add(newFlightNumber, new NORMFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
+            using (StreamWriter sw = new StreamWriter("flights.csv", true))
+            {
+                sw.WriteLine($"{newFlightNumber},{newOrigin},{newDestination},{newExpectedTime},");
+            }
         }
+        Console.WriteLine($"Flight {newFlightNumber} has been added!");
+        Console.WriteLine("Would you like to add another flight? (Y/N)");
+        string addAnotherFlight = Console.ReadLine().ToUpper();
+        if (addAnotherFlight == "N")
+        {
+            break;
+        }
+        else
+            continue;
     }
 }
