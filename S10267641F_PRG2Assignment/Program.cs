@@ -445,7 +445,7 @@ void DisplayAirlineFlights(Terminal t)
         
     if (i != 0)
     {
-        Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Expected Departure/Arrival Time", -33}{"Special Request Code", -23}Assigned Baording Gate");
+        Console.WriteLine($"{"Flight Number",-15}{"Airline Name",-23}{"Origin",-23}{"Destination",-23}{"Expected Departure/Arrival Time", -33}{"Special Request Code", -23}{"Boarding Gate",-15}");
         foreach (Flight flight in t.Flights.Values)
         {
             if (flight.FlightNumber == flightno)
@@ -526,5 +526,5 @@ void ModifyFlightDeatils(Terminal t)
 void DisplayFlightDetails(Terminal t)
 {
     Console.WriteLine("=============================================\nFlight Schedule for Changi Airport Terminal 5\n=============================================");
-    Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10} {5,-10} {6, -15}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate");
+    Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-33} {5,-15} {6}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate");
 }
