@@ -57,7 +57,7 @@ while (true)
     }
     else if (option == 6)
     {
-        ModifyFlightDeatils(terminal);
+        ModifyFlightDetails(terminal, assignGateDict);
     }
     else if (option == 7)
     {
@@ -490,7 +490,7 @@ void DisplayAirlineFlights(Terminal t)
     }
 }
 //Basic Feature 8: Modify Flight Details
-void ModifyFlightDeatils(Terminal t)
+void ModifyFlightDetails(Terminal t, Dictionary<string, string> assignGateDict)
 {
     DisplayAirlinefromCode(t);
 
@@ -500,8 +500,12 @@ void ModifyFlightDeatils(Terminal t)
     Console.WriteLine("2. Delete Flight");
     Console.WriteLine("Choose an option: ");
     int option = Convert.ToInt32(Console.ReadLine());
+
+    Flight flight = t.Flights[flightName];
+    Airline airline = t.GetAirlineFromFlight(flight);
+
     if (option == 1)
-    {
+    { 
         Console.WriteLine("Choose an option to modify:");
         Console.WriteLine("1. Modify Origin/Destination/Expected Time");
         Console.WriteLine("2. Modify Flight Status");
@@ -509,6 +513,7 @@ void ModifyFlightDeatils(Terminal t)
         Console.WriteLine("4. Modify Boarding Gate");
         Console.Write("Enter your choice: ");
         int ModifyOption = Convert.ToInt32(Console.ReadLine());
+
         if (ModifyOption == 1)
         {
             Console.Write("Enter new Origin: ");
@@ -516,11 +521,99 @@ void ModifyFlightDeatils(Terminal t)
             Console.Write("Enter new Destination: ");
             string newDestination = Console.ReadLine();
             Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
-            string time = Console.ReadLine();
-            
+            DateTime expectedTime = Convert.ToDateTime(Console.ReadLine());
+
+            flight.Origin = newOrigin;
+            flight.Destination = newDestination;
+            flight.ExpectedTime = expectedTime;
         }
+        else if (ModifyOption == 2)
+        {
+            Console.WriteLine("1. Delayed");
+            Console.WriteLine("2. Boarding");
+            Console.WriteLine("3. On Time");
+            Console.Write("Enter new status: ");
+            int newStatus = Convert.ToInt32(Console.ReadLine());
+
+            if (newStatus == 1)
+            {
+                flight.Status = "Delayed";
+            }
+            else if (newStatus == 2)
+            {
+                flight.Status = "Boarding";
+            }
+            else if (newStatus == 3)
+            {
+                flight.Status = "On Time";
+            }
+            else
+            {
+                Console.WriteLine("Invalid option");
+            }
+            Console.WriteLine("Flight status has been updated.");
+        }
+        else if (ModifyOption == 3)
+        {
+            Console.WriteLine("1. DDJB");
+            Console.WriteLine("2. CFFT");
+            Console.WriteLine("3. LWTT");
+            Console.WriteLine("4. None");
+            Console.Write("Enter new Special Request Code: ");
+            int newCode = Convert.ToInt32(Console.ReadLine());
+
+
+            Console.WriteLine("Special Request Code updated successfully.");
+        }
+        else if (ModifyOption == 4)
+        {
+            Console.Write("Enter new Boarding Gate: ");
+            string newGate = Console.ReadLine();
+
+            if (!string.IsNullOrEmpty(newGate))
+            {
+                assignGateDict[newGate] = flight.FlightNumber;
+                Console.WriteLine("Boarding gate updated successfully.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid option");
+        }
+
+        Console.WriteLine("Flight updated!");
+        Console.WriteLine($"Flight Number: {flight.FlightNumber}");
+        Console.WriteLine($"Airline Name: {airline.Name}");
+        Console.WriteLine($"Origin: {flight.Origin}");
+        Console.WriteLine($"Destination: {flight.Destination}");
+        Console.WriteLine($"Expected Departure/Arrival Time: {flight.ExpectedTime:dd/M/yyyy h:mm:ss tt}");
+        Console.WriteLine($"Status: {flight.Status}");
+        Console.WriteLine($"Special Request Code: "); //incomplete
+        Console.WriteLine($"Boarding Gate: {t.BoardingGates[flightName].GateName}");
     }
 
+    else if (option == 2)
+    {
+        if (terminal.Flights.ContainsKey(flightName))
+        {
+            Console.Write($"Are you sure you want to delete flight {flight.FlightNumber}? [Y/N]: ");
+            string confirmation = Console.ReadLine().ToUpper();
+            if (confirmation == "Y")
+            {
+                airline.RemoveFlight(flight);
+                t.Flights.Remove(flightName);
+                Console.WriteLine($"Flight {flightName} has been successfully deleted.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid Flight Number.");
+        }    
+    }
+    else
+    {
+        Console.WriteLine("Invalid option");
+    }
 }
 //Basic Feature 9: Display scheduled flights in chronological order, with boarding gates assignments where applicable
 void DisplayFlightDetails(Terminal t)
