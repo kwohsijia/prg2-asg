@@ -11,7 +11,6 @@ Terminal terminal = new Terminal("Terminal 5");
 LoadAirline(terminal);
 LoadBoardingGate(terminal);
 LoadFlights(terminal);
-Dictionary<string, string> assignGateDict = new Dictionary<string, string>();
 
 //Main program
 while (true)
