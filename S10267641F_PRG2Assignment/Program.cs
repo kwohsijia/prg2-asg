@@ -569,7 +569,13 @@ void DisplayFlightDetails(Terminal t)
 {
     Console.WriteLine("=============================================\nFlight Schedule for Changi Airport Terminal 5\n=============================================");
     Console.WriteLine("{0,-16} {1,-23} {2,-23} {3,-23} {4,-36} {5,-16} {6,-13}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate");
-    foreach (Flight f in t.Flights.Values.OrderBy(f => f.ExpectedTime))
+    List<Flight> flights = new List<Flight>();
+    foreach (Flight f in t.Flights.Values)
+    {
+        flights.Add(f);
+    }
+    flights.Sort();
+    foreach (Flight f in flights)
     {
         if (t.BoardingGates.ContainsKey(f.FlightNumber) && t.BoardingGates[f.FlightNumber].Flight != null)
         {
@@ -579,5 +585,14 @@ void DisplayFlightDetails(Terminal t)
         {
             Console.WriteLine("{0,-16} {1,-23} {2,-23} {3,-23} {4,-36} {5,-16} {6,-13}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, "Unassigned");
         }
+    }
+}
+
+//Advanced Feature (a)
+void ProcessFlightsInBulk(Terminal t)
+{
+    foreach (BoardingGate b in t.BoardingGates.Values)
+    {
+
     }
 }

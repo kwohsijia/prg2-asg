@@ -26,7 +26,6 @@ namespace S10267641F_PRG2Assignment
             SupportsDDJB = supportsDDJB;
             SupportsLWTT = supportsLWTT;
             Flight = null;
-
         }
 
         public double CalculateFees()
