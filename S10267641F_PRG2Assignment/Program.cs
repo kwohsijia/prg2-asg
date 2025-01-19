@@ -135,7 +135,7 @@ void LoadFlights(Terminal t)
             string destination = data[2];
             DateTime expectedTime = DateTime.Parse(data[3]);
             string type = data[4];
-            //create flight objects and add into dictionary
+            //create flight objects and add into dictionary according to special request code
             if (type == "CFFT")
             {
                 CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
@@ -168,6 +168,7 @@ void ListFlights(Terminal t)
 {
     Console.WriteLine("=============================================\nList of Flights for Changi Airport Terminal 5\n=============================================");
     Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
+    //list all flights in the flight dictionary
     foreach (Flight f in t.Flights.Values)
     {
         Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime);
@@ -198,8 +199,10 @@ void AssignBoardingGate(Terminal t) // Basic feature 5
         string flightNumber = Console.ReadLine();
         Console.WriteLine("Enter Boarding Gate Name:");
         string gateName = Console.ReadLine();
+        // check if the boarding gate is assigned to a flight
         if (t.BoardingGates[gateName].Flight == null)
         {
+            // assign flight to boarding gate
             Flight f = t.Flights[flightNumber];
             t.BoardingGates[gateName].Flight = f;
             Console.WriteLine($"Flight Number: {f.FlightNumber}");
@@ -207,6 +210,7 @@ void AssignBoardingGate(Terminal t) // Basic feature 5
             Console.WriteLine($"Destination: {f.Destination}");
             Console.WriteLine($"Expected Time: {f.ExpectedTime}");
             Console.WriteLine($"Boarding Gate Name: {gateName}");
+            // display special request code
             if (f is DDJBFlight)
             {
                 Console.WriteLine($"Special Request Code: DDJB");
@@ -282,6 +286,7 @@ void CreateFlight(Terminal t)
         DateTime newExpectedTime = DateTime.Parse(Console.ReadLine());
         Console.Write("Enter Special Request Code (CFFT/DDJB/LWTT/None): ");
         string newType = Console.ReadLine().ToUpper();
+        // create flight according to special request code and append to flights.csv
         if (newType == "CFFT")
         {
             t.Flights.Add(newFlightNumber, new CFFTFlight(newFlightNumber, newOrigin, newDestination, newExpectedTime));
@@ -569,6 +574,7 @@ void DisplayFlightDetails(Terminal t)
 {
     Console.WriteLine("=============================================\nFlight Schedule for Changi Airport Terminal 5\n=============================================");
     Console.WriteLine("{0,-16} {1,-23} {2,-23} {3,-23} {4,-36} {5,-16} {6,-13}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate");
+    // create list and add flights so that it can be sorted accoridng to expected time
     List<Flight> flights = new List<Flight>();
     foreach (Flight f in t.Flights.Values)
     {
