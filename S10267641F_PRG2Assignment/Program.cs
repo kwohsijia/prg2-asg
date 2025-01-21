@@ -57,7 +57,7 @@ while (true)
     }
     else if (option == 6)
     {
-        ModifyFlightDetails(terminal, assignGateDict);
+        //ModifyFlightDetails(terminal);
     }
     else if (option == 7)
     {
@@ -423,14 +423,14 @@ void DisplayAirlineFlights(Terminal t)
                 //Determine Boarding Gate 
                 string boardingGate = "Not Assigned";
 
-                foreach (var gate in assignGateDict)
-                {
-                    if (gate.Value == flight.FlightNumber)
-                    {
-                        boardingGate = gate.Key; // Assign the gate name
-                        break; // Exit the loop once the gate is found
-                    }
-                } 
+                //foreach (var gate in t.BoardingGates.Values)
+                //{
+                //    if (gate.Value == flight.FlightNumber)
+                //    {
+                //        boardingGate = gate.Key; // Assign the gate name
+                //        break; // Exit the loop once the gate is found
+                //    }
+                //} 
 
                 // Output the flight details
                 Console.WriteLine($"{flight.FlightNumber,-15}{t.GetAirlineFromFlight(flight).Name,-23}{flight.Origin,-23}{flight.Destination,-23}{flight.ExpectedTime,-33}{specialreq,-23}{boardingGate}");
@@ -582,14 +582,18 @@ void DisplayFlightDetails(Terminal t)
     flights.Sort();
     foreach (Flight f in flights)
     {
-        if (t.BoardingGates.ContainsKey(f.FlightNumber) && t.BoardingGates[f.FlightNumber].Flight != null)
+        string boardingGate = "Unassigned";
+
+        // Check if the flight has an assigned boarding gate
+        foreach (BoardingGate b in t.BoardingGates.Values)
         {
-            Console.WriteLine("{0,-16} {1,-23} {2,-23} {3,-23} {4,-36} {5,-16} {6,-13}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, t.BoardingGates[f.FlightNumber].GateName);
+            if (b.Flight != null && b.Flight.FlightNumber == f.FlightNumber)
+            {
+                boardingGate = b.GateName;
+                break; // Exit the loop once the matching gate is found
+            }
         }
-        else
-        {
-            Console.WriteLine("{0,-16} {1,-23} {2,-23} {3,-23} {4,-36} {5,-16} {6,-13}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, "Unassigned");
-        }
+        Console.WriteLine("{0,-16} {1,-23} {2,-23} {3,-23} {4,-36} {5,-16} {6,-13}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, boardingGate);
     }
 }
 

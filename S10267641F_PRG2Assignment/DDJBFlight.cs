@@ -14,8 +14,8 @@ namespace S10267641F_PRG2Assignment
     {
         public double RequestFee { get; set; }
 
-        public DDJBFlight(string flightNumber, string origin, string destination, DateTime expectedTime, double requestFee = 300.0, string status = "On Time")
-            : base(flightNumber, origin, destination, expectedTime, status)
+        public DDJBFlight(string flightNumber, string origin, string destination, DateTime expectedTime, double requestFee = 300.0)
+            : base(flightNumber, origin, destination, expectedTime)
         {
             RequestFee = requestFee;
         }

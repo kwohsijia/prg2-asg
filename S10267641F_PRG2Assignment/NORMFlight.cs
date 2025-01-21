@@ -14,8 +14,8 @@ namespace S10267641F_PRG2Assignment
 {
     class NORMFlight : Flight
     {
-        public NORMFlight(string flightNumber, string origin, string destination, DateTime expectedTime, string status = "On Time")
-        : base(flightNumber, origin, destination, expectedTime, status) { }
+        public NORMFlight(string flightNumber, string origin, string destination, DateTime expectedTime)
+        : base(flightNumber, origin, destination, expectedTime) { }
 
         public override double CalculateFees()
         {
