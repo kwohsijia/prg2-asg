@@ -28,8 +28,17 @@ while (true)
     Console.WriteLine("7. Display Flight Schedule");
     Console.WriteLine("8. Display Airline Fees For The Day");
     Console.WriteLine("0. Exit");
-    Console.WriteLine("\nPlease select your option:");
-    int option = Convert.ToInt32(Console.ReadLine());
+    int? option = null;
+    try
+    {
+        Console.WriteLine("\nPlease select your option:");
+        option = Convert.ToInt32(Console.ReadLine());
+    }
+    catch (FormatException)
+    {
+        Console.WriteLine("Invalid option. Please try again.");
+        continue;
+    }
 
     if (option == 0)
     {
@@ -71,7 +80,7 @@ while (true)
     }
     else
     {
-        Console.WriteLine("Invalid option. Please try again.");
+        Console.WriteLine("Please enter an option from 0-8.");
     }
 }
 
@@ -278,12 +287,6 @@ void AssignBoardingGate(Terminal t) // Basic feature 5
             Console.WriteLine("Boarding Gate has already been assigned. Please try a different boarding gate.");
         }
     }
-    //List<string> CFFTGateList = new List<string>();
-    //List<string> DDJBGateList = new List<string>();
-    //List<string> LWTTGateList = new List<string>();
-    //CFFTGateList = ["B1", "B2", "B3", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14", "C15", "C16", "C17", "C18", "C19", "C20", "C21", "C22"];
-    //DDJBGateList = ["A10", "A11", "A12", "A13", "A20", "A21", "A22", "B10", "B11", "B12"];
-    //LWTTGateList = ["A1", "A2", "A20", "A21", "C14", "C15", "C16", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12", "B13", "B14", "B15", "B16", "B17", "B18", "B19", "B20", "B21", "B22"];
 }
 
 //Basic feature 6: Create a new flight
