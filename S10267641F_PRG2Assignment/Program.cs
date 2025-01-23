@@ -591,7 +591,7 @@ void ModifyFlightDetails(Terminal t, Dictionary<string, string> assignGateDict)
 void DisplayFlightDetails(Terminal t)
 {
     Console.WriteLine("=============================================\nFlight Schedule for Changi Airport Terminal 5\n=============================================");
-    Console.WriteLine("{0,-15} {1,-21} {2,-20} {3,-20} {4,-31} {5,-9} {6,-13} {7}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate","Special Request Code");
+    Console.WriteLine("{0,-15} {1,-21} {2,-20} {3,-18} {4,-31} {5,-9} {6,-13} {7}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate","Special Request Code");
     // create list and add flights so that it can be sorted accoridng to expected time
     List<Flight> flights = new List<Flight>();
     foreach (Flight f in t.Flights.Values)
@@ -612,7 +612,7 @@ void DisplayFlightDetails(Terminal t)
                 break; // Exit the loop once the matching gate is found
             }
         }
-        Console.WriteLine("{0,-15} {1,-21} {2,-20} {3,-20} {4,-31} {5,-9} {6,-13} {7}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, boardingGate, flightToCode[f.FlightNumber]);
+        Console.WriteLine("{0,-15} {1,-21} {2,-20} {3,-18} {4,-31} {5,-9} {6,-13} {7}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, boardingGate, flightToCode[f.FlightNumber]);
     }
 }
 
