@@ -8,9 +8,10 @@ using System.ComponentModel;
 using System.Diagnostics.Metrics;
 
 Terminal terminal = new Terminal("Terminal 5");
+Dictionary<string, string> flightToCode = new Dictionary<string, string>();
 LoadAirline(terminal);
 LoadBoardingGate(terminal);
-LoadFlights(terminal);
+LoadFlights(terminal, flightToCode);
 
 //Main program
 while (true)
@@ -25,6 +26,7 @@ while (true)
     Console.WriteLine("5. Display Airline Flights");
     Console.WriteLine("6. Modify Flight Details");
     Console.WriteLine("7. Display Flight Schedule");
+    Console.WriteLine("8. Display Airline Fees For The Day");
     Console.WriteLine("0. Exit");
     Console.WriteLine("\nPlease select your option:");
     int option = Convert.ToInt32(Console.ReadLine());
@@ -62,6 +64,10 @@ while (true)
     else if (option == 7)
     {
         DisplayFlightDetails(terminal);
+    }
+    else if (option == 8)
+    {
+        DisplayAirlineFees(terminal);
     }
     else
     {
@@ -119,7 +125,7 @@ void LoadBoardingGate (Terminal t)
 }
 
 //Basic Feature 2: Load files (flights)
-void LoadFlights(Terminal t)
+void LoadFlights(Terminal t, Dictionary<string, string> d)
 {
     int flightCount = 0;
     //Load flights.csv file
@@ -139,21 +145,25 @@ void LoadFlights(Terminal t)
             {
                 CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
                 t.Flights.Add(flightNumber, newflight);
+                flightToCode.Add(flightNumber, "CFFT");
             }
             else if (type == "DDJB")
             {
                 DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
                 t.Flights.Add(flightNumber, newflight);
+                flightToCode.Add(flightNumber, "DDJB");
             }
             else if (type == "LWTT")
             {
                 LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
                 t.Flights.Add(flightNumber, newflight);
+                flightToCode.Add(flightNumber, "LWTT");
             }
             else
             {
                 NORMFlight newflight = new NORMFlight(flightNumber, origin, destination, expectedTime);
                 t.Flights.Add(flightNumber, newflight);
+                flightToCode.Add(flightNumber, "None");
             }
             flightCount++;
         }
@@ -180,11 +190,17 @@ void ListBoardingGates(Terminal t)
     Console.WriteLine("=============================================");
     Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
     Console.WriteLine("=============================================");
-    Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}LWTT");
+    Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}{"LWTT",-23}Flight");
     foreach (KeyValuePair<string, BoardingGate> kvp in t.BoardingGates)
     {
-        BoardingGate boardingGate = kvp.Value;
-        Console.WriteLine(boardingGate.ToString());
+        if (kvp.Value.Flight == null)
+        {
+            Console.WriteLine($"{kvp.Key,-16}{kvp.Value.SupportsDDJB,-23}{kvp.Value.SupportsCFFT,-23}{kvp.Value.SupportsLWTT,-23}");
+        }
+        else
+        {
+            Console.WriteLine($"{kvp.Key,-16}{kvp.Value.SupportsDDJB,-23}{kvp.Value.SupportsCFFT,-23}{kvp.Value.SupportsLWTT,-23}{kvp.Value.Flight.FlightNumber}");
+        }
     }
 }
 
@@ -572,7 +588,7 @@ void ModifyFlightDetails(Terminal t, Dictionary<string, string> assignGateDict)
 void DisplayFlightDetails(Terminal t)
 {
     Console.WriteLine("=============================================\nFlight Schedule for Changi Airport Terminal 5\n=============================================");
-    Console.WriteLine("{0,-16} {1,-23} {2,-23} {3,-23} {4,-36} {5,-16} {6,-13}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate");
+    Console.WriteLine("{0,-15} {1,-21} {2,-20} {3,-20} {4,-31} {5,-9} {6,-13} {7}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time", "Status", "Boarding Gate","Special Request Code");
     // create list and add flights so that it can be sorted accoridng to expected time
     List<Flight> flights = new List<Flight>();
     foreach (Flight f in t.Flights.Values)
@@ -593,7 +609,7 @@ void DisplayFlightDetails(Terminal t)
                 break; // Exit the loop once the matching gate is found
             }
         }
-        Console.WriteLine("{0,-16} {1,-23} {2,-23} {3,-23} {4,-36} {5,-16} {6,-13}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, boardingGate);
+        Console.WriteLine("{0,-15} {1,-21} {2,-20} {3,-20} {4,-31} {5,-9} {6,-13} {7}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, boardingGate, flightToCode[f.FlightNumber]);
     }
 }
 
@@ -603,5 +619,18 @@ void ProcessFlightsInBulk(Terminal t)
     foreach (BoardingGate b in t.BoardingGates.Values)
     {
 
+    }
+}
+
+//Advanced Feature (b)
+void DisplayAirlineFees(Terminal t)
+{
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Airline Fees for Changi Airport Terminal 5");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}{"Total Fees",-15}");
+    foreach (Airline a in t.Airline.Values)
+    {
+        Console.WriteLine($"{a.Code,-15}{a.Name,-20}{a.CalculateFees(),-15}");
     }
 }

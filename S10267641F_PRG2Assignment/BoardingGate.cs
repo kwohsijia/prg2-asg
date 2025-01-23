@@ -19,7 +19,7 @@ namespace S10267641F_PRG2Assignment
         public bool SupportsLWTT { get; set; }
         public Flight Flight { get; set; }
 
-        public BoardingGate (string gateName, bool supportsCFFT, bool supportsDDJB, bool supportsLWTT)
+        public BoardingGate(string gateName, bool supportsCFFT, bool supportsDDJB, bool supportsLWTT)
         {
             GateName = gateName;
             SupportsCFFT = supportsCFFT;
@@ -30,7 +30,35 @@ namespace S10267641F_PRG2Assignment
 
         public double CalculateFees()
         {
-            return Flight.CalculateFees() + 300.0;
+            double baseFee = 300.0;
+            double arrdepFee = 0.0;
+            double specialFee = 0.0;
+
+            if (Flight.Destination == "Singapore (SIN)")
+            {
+                arrdepFee = 500.0;
+            }
+
+            else
+            {
+                arrdepFee = 800.0;
+            }
+
+            if (SupportsCFFT)
+            {
+                specialFee = 150.0;
+            }
+
+            else if (SupportsDDJB)
+            {
+                specialFee = 300.0;
+            }
+
+            else if (SupportsLWTT)
+            {
+                specialFee = 500.0;
+            }
+            return baseFee + arrdepFee;
         }
 
         public override string ToString()
