@@ -543,7 +543,7 @@ void ModifyFlightDetails(Terminal t, Dictionary<string, string> assignGateDict)
 
     else if (option == 2)
     {
-        if (terminal.Flights.ContainsKey(flightName))
+        if (t.Flights.ContainsKey(flightName))
         {
             Console.Write($"Are you sure you want to delete flight {flight.FlightNumber}? [Y/N]: ");
             string confirmation = Console.ReadLine().ToUpper();
