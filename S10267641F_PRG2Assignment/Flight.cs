@@ -18,13 +18,13 @@ namespace S10267641F_PRG2Assignment
         public DateTime ExpectedTime { get; set; }
         public string Status {  get; set; }
 
-        public Flight(string flightNumber, string origin, string destination, DateTime expectedTime, string status)
+        public Flight(string flightNumber, string origin, string destination, DateTime expectedTime)
         {
             FlightNumber = flightNumber;
             Origin = origin;
             Destination = destination;
             ExpectedTime = expectedTime;
-            Status = status;
+            Status = "Scheduled";
         }
         public virtual double CalculateFees()
         {
