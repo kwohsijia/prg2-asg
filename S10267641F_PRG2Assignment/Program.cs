@@ -28,6 +28,7 @@ while (true)
     Console.WriteLine("6. Modify Flight Details");
     Console.WriteLine("7. Display Flight Schedule");
     Console.WriteLine("8. Display Airline Fees For The Day");
+    Console.WriteLine("9. Assign remaining flights to boarding gates");
     Console.WriteLine("0. Exit");
     int? option = null;
     try
@@ -78,6 +79,10 @@ while (true)
     else if (option == 8)
     {
         DisplayAirlineFees(terminal);
+    }
+    else if (option == 9)
+    {
+        ProcessFlightsInBulk(terminal);
     }
     else
     {
@@ -446,17 +451,6 @@ void DisplayAirlineFlights(Terminal t)
 
                 //Determine Boarding Gate 
                 string boardingGate = "Not Assigned";
-
-                //foreach (var gate in t.BoardingGates.Values)
-                //{
-                //    if (gate.Value == flight.FlightNumber)
-                //    {
-                //        boardingGate = gate.Key; // Assign the gate name
-                //        break; // Exit the loop once the gate is found
-                //    }
-                //} 
-
-                // Output the flight details
                 Console.WriteLine($"{flight.FlightNumber,-15}{t.GetAirlineFromFlight(flight).Name,-23}{flight.Origin,-23}{flight.Destination,-23}{flight.ExpectedTime,-33}{specialreq,-23}{boardingGate}");
             }
         }
@@ -667,9 +661,90 @@ void DisplayFlightDetails(Terminal t)
 //Advanced Feature (a)
 void ProcessFlightsInBulk(Terminal t)
 {
-    foreach (BoardingGate b in t.BoardingGates.Values)
+    try
     {
+        Queue<Flight> unassignedFlights = new Queue<Flight>();
+        List<BoardingGate> availableGates = new List<BoardingGate>();
+        int initiallyAssignedFlights = 0;
+        int initiallyAssignedGates = 0;
 
+        foreach (var gate in t.BoardingGates.Values)
+        {
+            if (gate.Flight == null)
+            {
+                availableGates.Add(gate);
+            }
+            else
+            {
+                initiallyAssignedGates++;
+            }
+        }
+
+        foreach (var flight in t.Flights.Values)
+        {
+            bool isAssigned = false;
+            foreach (var gate in t.BoardingGates.Values)
+            {
+                if (gate.Flight == flight)
+                {
+                    isAssigned = true;
+                    initiallyAssignedFlights++;
+                    break;
+                }
+            }
+            if (!isAssigned)
+            {
+                unassignedFlights.Enqueue(flight);
+            }
+        }
+
+        Console.WriteLine($"Total unassigned flights: {unassignedFlights.Count}");
+        Console.WriteLine($"Total available boarding gates: {availableGates.Count}");
+
+        int assignedCount = 0;
+        while (unassignedFlights.Count > 0 && availableGates.Count > 0)
+        {
+            Flight flight = unassignedFlights.Dequeue();
+            BoardingGate assignedGate = null;
+
+            foreach (var gate in availableGates)
+            {
+                if ((flight is CFFTFlight && gate.SupportsCFFT) ||
+                    (flight is DDJBFlight && gate.SupportsDDJB) ||
+                    (flight is LWTTFlight && gate.SupportsLWTT) ||
+                    (!(flight is CFFTFlight || flight is DDJBFlight || flight is LWTTFlight)))
+                {
+                    assignedGate = gate;
+                    break;
+                }
+            }
+
+            if (assignedGate != null)
+            {
+                assignedGate.Flight = flight;
+                availableGates.Remove(assignedGate);
+                assignedCount++;
+                Console.WriteLine($"Assigned Flight {flight.FlightNumber} to Gate {assignedGate.GateName}");
+            }
+            else
+            {
+                Console.WriteLine($"No suitable gate found for Flight {flight.FlightNumber}");
+            }
+        }
+
+        int totalProcessedFlights = assignedCount + initiallyAssignedFlights;
+        int totalProcessedGates = initiallyAssignedGates + assignedCount;
+        double percentageProcessedFlights = (double)assignedCount / totalProcessedFlights * 100;
+        double percentageProcessedGates = (double)assignedCount / totalProcessedGates * 100;
+
+        Console.WriteLine($"Total Flights Assigned: {assignedCount}");
+        Console.WriteLine($"Remaining Unassigned Flights: {unassignedFlights.Count}");
+        Console.WriteLine($"Total Flights and Boarding Gates Processed: {totalProcessedFlights}, {totalProcessedGates}");
+        Console.WriteLine($"Percentage of Flights and Gates Processed Automatically: {percentageProcessedFlights:F2}% Flights, {percentageProcessedGates:F2}% Gates");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
     }
 }
 
