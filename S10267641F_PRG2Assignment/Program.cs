@@ -469,146 +469,171 @@ void DisplayAirlineFlights(Terminal t)
 //Basic Feature 8: Modify Flight Details
 void ModifyFlightDetails(Terminal t)
 {
-
-    DisplayAirlinefromCode(t);
-
-    Console.WriteLine("Choose an existing Flight to modify or delete:  ");
-    string flightNum = Console.ReadLine().ToUpper();
-
-    Console.WriteLine("1. Modify Flight");
-    Console.WriteLine("2. Delete Flight");
-    Console.WriteLine("Choose an option: ");
-    int option = Convert.ToInt32(Console.ReadLine());
-
-    if (option == 1)
+    try
     {
-        Console.WriteLine("Choose an option to modify:");
-        Console.WriteLine("1. Modify Origin/Destination/Expected Time");
-        Console.WriteLine("2. Modify Flight Status");
-        Console.WriteLine("3. Modify Special Request Code");
-        Console.WriteLine("4. Modify Boarding Gate");
-        Console.Write("Enter your choice: ");
-        int modifyOption = Convert.ToInt32(Console.ReadLine());
+        DisplayAirlinefromCode(t);
 
-        if (modifyOption  == 1)
+        Console.WriteLine("Choose an existing Flight to modify or delete:  ");
+        string flightNum = Console.ReadLine().ToUpper();
+
+        if (!t.Flights.ContainsKey(flightNum))
         {
-            Console.Write("Enter new Origin: ");
-            string newOrigin = Console.ReadLine();
+            Console.WriteLine("Error: Flight not found. Please enter a valid flight number.");
+            return;
+        }
 
-            Console.Write("Enter new Destination: ");
-            string newDestination = Console.ReadLine();
+        Console.WriteLine("1. Modify Flight");
+        Console.WriteLine("2. Delete Flight");
+        Console.WriteLine("Choose an option: ");
 
-            Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
-            DateTime expectedTime = Convert.ToDateTime(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int option) || (option != 1 && option != 2))  //.TryParse() prevents runtime exception if user enter non-numeric values. This check ensures that if the option is not 1 or 2 or if the option is non-numeric, then an error message will be printed. 
+        {
+            Console.WriteLine("Invalid option. Please enter 1 or 2.");
+            return;
+        }
+        Flight flight = t.Flights[flightNum];
 
-            foreach (Flight flights in t.Flights.Values)
+        if (option == 1)
+        {
+            Console.WriteLine("Choose an option to modify:");
+            Console.WriteLine("1. Modify Origin/Destination/Expected Time");
+            Console.WriteLine("2. Modify Flight Status");
+            Console.WriteLine("3. Modify Special Request Code");
+            Console.WriteLine("4. Modify Boarding Gate");
+            Console.Write("Enter your choice: ");
+
+            if (!int.TryParse(Console.ReadLine(), out int modifyOption) || modifyOption < 1 || modifyOption > 4)
             {
-                if (flightNum == flights.FlightNumber)
-                {
-                    flights.Origin = newOrigin;
-                    flights.Destination = newDestination;
-                    flights.ExpectedTime = expectedTime;
-                    Console.WriteLine();
-                    Console.WriteLine("Flight updated!");
-                }
+                Console.WriteLine("Invalid option. Please enter a number between 1 and 4.");
+                return;
+            }
+
+            switch (modifyOption)
+            { //switch is an alternative to if-else. it is better as it automatically exits after executing a case due to break. it performs better when checking against multiple values.
+
+                case 1:
+
+                    Console.Write("Enter new Origin: ");
+                    flight.Origin = Console.ReadLine();
+
+                    Console.Write("Enter new Destination: ");
+                    flight.Destination = Console.ReadLine();
+
+                    Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+                    if (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime newTime)) //.TryParseExact() ensures a consistent date format
+                    {
+                        Console.WriteLine("Invalid date format. Please use dd/MM/yyyy HH:mm.");
+                        return;
+                    }
+
+                    flight.ExpectedTime = newTime;
+                    Console.WriteLine("Flight details updated successfully. ");
+                    break;
+
+                case 2:
+
+                    Console.WriteLine("1. Delayed");
+                    Console.WriteLine("2. Boarding");
+                    Console.WriteLine("3. On Time");
+                    Console.Write("Choose new status: ");
+
+                    if (!int.TryParse(Console.ReadLine(), out int newStatus) || newStatus < 1 || newStatus > 3) //similar to option but this one restrict the input value to 1,2 and 3
+                    {
+                        Console.WriteLine("Invalid option. Please enter 1, 2, or 3.");
+                        return;
+                    }
+
+                    if (newStatus == 1)
+                    {
+                        flight.Status = "Delayed";
+                    }
+                    else if (newStatus == 2)
+                    {
+                        flight.Status = "Boarding";
+                    }
+                    else if (newStatus == 3)
+                    {
+                        flight.Status = "On Time";
+                    }
+                    Console.WriteLine("Flight status has been updated.\n");
+                    break;
+
+
+                case 3:
+
+                    Console.Write("Enter new Special Request Code (CFFT/DDJB/LWTT/None): ");
+                    string specialcode = Console.ReadLine().ToUpper();
+
+                    if (specialcode != "CFFT" && specialcode != "DDJB" && specialcode != "LWTT" && specialcode != "NONE")
+                    {
+                        Console.WriteLine("Invalid code. Please enter CFFT, DDJB, LWTT, or None.");
+                        Console.WriteLine();
+                    }
+
+                    flightToCode[flightNum] = specialcode;
+                    Console.WriteLine("Special Request Code updated successfully!");
+                    break;
+
+                case 4:
+
+                    Console.Write("Enter new Boarding Gate: ");
+                    string newGate = Console.ReadLine().ToUpper();
+                    if (!t.BoardingGates.ContainsKey(newGate))
+                    {
+                        Console.WriteLine("Invalid boarding gate. Please enter a valid gate.");
+                        return;
+                    }
+
+                    if (t.BoardingGates[newGate].Flight != null)
+                    {
+                        Console.WriteLine("Error: This boarding gate is already assigned to another flight.");
+                        return;
+                    }
+
+                    t.BoardingGates[newGate].Flight = flight;
+                    Console.WriteLine("Boarding Gate updated successfully!");
+                    break;
             }
         }
-        else if (modifyOption == 2)
+        else if (option == 2) // Delete Flight
         {
-            Console.WriteLine("1. Delayed");
-            Console.WriteLine("2. Boarding");
-            Console.WriteLine("3. On Time");
-            Console.Write("Choose new status: ");
-            int newStatus = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Are you sure you want to delete this flight? (Y/N): ");
+            string confirm = Console.ReadLine().ToUpper();
 
-
-            Flight f = t.Flights[flightNum];
-            if (newStatus == 1)
+            if (confirm == "Y")
             {
-                f.Status = "Delayed";
-                Console.WriteLine("Flight status has been updated.\n");
-            }
-            else if (newStatus == 2)
-            {
-                f.Status = "Boarding";
-                Console.WriteLine("Flight status has been updated.\n");
-            }
-            else if (newStatus == 3)
-            {
-                f.Status = "On Time";
-                Console.WriteLine("Flight status has been updated.\n");
+                t.Flights.Remove(flightNum);
+                Console.WriteLine("Flight deleted successfully.");
             }
             else
             {
-                Console.WriteLine("Invalid Option. Try Again.");
+                Console.WriteLine("Flight deletion cancelled.");
             }
         }
-        else if (modifyOption == 3)
-        {
-            Console.Write("Enter new Special Request Code (CFFT/DDJB/LWTT/None): ");
-            string specialcode = Console.ReadLine().ToUpper();
-            Flight f = t.Flights[flightNum];
+        string assignedGate = "Unassigned";
 
-            if (specialcode != "CFFT" && specialcode != "DDJB" && specialcode != "LWTT" && specialcode != "NONE")
-            {
-                Console.WriteLine("Please enter a valid code.");
-                Console.WriteLine();
-            }
-            else
-            {
-                flightToCode[flightNum] = specialcode;
-            }
-        }
-        else if (modifyOption == 4)
+        foreach (var gate in t.BoardingGates.Values)
         {
-            Console.Write("Enter new Boarding Gate: ");
-            string newGate = Console.ReadLine();
-            if (!string.IsNullOrEmpty(newGate))
+            if (gate.Flight == flight)
             {
-               
+                assignedGate = gate.GateName;
+                break; // Stop searching once we find the assigned gate
             }
-
         }
+        Console.WriteLine("\nUpdated Flight Details:");
+        Console.WriteLine($"Flight Number: {flight.FlightNumber}");
+        Console.WriteLine($"Airline Name: {t.GetAirlineFromFlight(flight).Name}");
+        Console.WriteLine($"Origin: {flight.Origin}");
+        Console.WriteLine($"Destination: {flight.Destination}");
+        Console.WriteLine($"Expected Departure/Arrival Time: {flight.ExpectedTime}");
+        Console.WriteLine($"Status: {flight.Status}");
+        Console.WriteLine($"Special Request Code: {(flightToCode.ContainsKey(flightNum) ? flightToCode[flightNum] : "None")}");
+        Console.WriteLine($"Boarding Gate: {assignedGate}");
     }
-
-    //Console.WriteLine("Flight updated!");
-    //Console.WriteLine($"Flight Number: {}");
-    //Console.WriteLine($"Airline Name: {}");
-    //Console.WriteLine($"Origin: {}");
-    //Console.WriteLine($"Destination: {}");
-    //Console.WriteLine($"Expected Departure/Arrival Time: {}");
-    //Console.WriteLine($"Status: {}");
-    //Console.WriteLine($"Special Request Code: "); 
-    //Console.WriteLine($"Boarding Gate: {}");
-    //    }
-    //    else if (option == 2)
-    //    {
-    //        Console.WriteLine();
-    //        Console.Write("Are You Sure? (Y/N): ");
-    //        string confirmation = Console.ReadLine().ToUpper();
-
-    //        if (confirmation == "Y")
-    //        {
-    //            if (terminal.Flights.ContainsKey(flightNum))
-    //            {
-    //                Flight flight = terminal.Flights[flightNum];
-    //                Airline airline = terminal.GetAirlineFromFlight(flight);
-    //                airline.RemoveFlight(flight);
-    //                terminal.Flights.Remove(flightNum);
-    //                Console.WriteLine($"Flight {flightNum} has been successfully deleted.");
-    //            }
-    //            else
-    //            {
-    //                Console.WriteLine("Invalid Flight Number.");
-    //            }
-    //        }
-
-    //        if (confirmation != "N" || confirmation != "Y")
-    //        {
-    //            Console.WriteLine("Please enter a valid choice.");
-    //            Console.WriteLine();
-    //        }
-    //    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+    }
 }
 //Basic Feature 9: Display scheduled flights in chronological order, with boarding gates assignments where applicable
 void DisplayFlightDetails(Terminal t)
