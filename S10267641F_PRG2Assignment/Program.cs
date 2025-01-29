@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics.Metrics;
 
 Terminal terminal = new Terminal("Terminal 5");
+//Dictionary to store the special request code of each flight
 Dictionary<string, string> flightToCode = new Dictionary<string, string>();
 LoadAirline(terminal);
 LoadBoardingGate(terminal);
@@ -68,7 +69,7 @@ while (true)
     }
     else if (option == 6)
     {
-        //ModifyFlightDetails(terminal);
+        ModifyFlightDetails(terminal);
     }
     else if (option == 7)
     {
@@ -357,7 +358,7 @@ void DisplayAirlinefromCode (Terminal t)
     Console.WriteLine("=============================================");
     Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}");
 
-    foreach (KeyValuePair<string, Airline> kvp in t.Airline)
+    foreach (KeyValuePair<string, Airline> kvp in t.Airlines)
     {
         Airline airline = kvp.Value;
         Console.WriteLine(airline.ToString());
@@ -368,7 +369,7 @@ void DisplayAirlinefromCode (Terminal t)
 
     //retrieve the Airline object selected
     Console.WriteLine("=============================================");
-    Console.WriteLine($"List of Flights for {t.Airline[airlinecode].Name}");
+    Console.WriteLine($"List of Flights for {t.Airlines[airlinecode].Name}");
     Console.WriteLine("=============================================");
 
     //for each Flight from that Airline, show their Airline Number, Origin and Destination
@@ -462,7 +463,7 @@ void DisplayAirlineFlights(Terminal t)
     }
 }
 //Basic Feature 8: Modify Flight Details
-void ModifyFlightDetails(Terminal t, Dictionary<string, string> assignGateDict)
+void ModifyFlightDetails(Terminal t)
 {
     DisplayAirlinefromCode(t);
 
@@ -541,12 +542,8 @@ void ModifyFlightDetails(Terminal t, Dictionary<string, string> assignGateDict)
         {
             Console.Write("Enter new Boarding Gate: ");
             string newGate = Console.ReadLine();
-
-            if (!string.IsNullOrEmpty(newGate))
-            {
-                assignGateDict[newGate] = flight.FlightNumber;
-                Console.WriteLine("Boarding gate updated successfully.");
-            }
+            t.BoardingGates[newGate].Flight = flight;
+            Console.WriteLine("Boarding gate updated successfully.");
         }
         else
         {
@@ -561,7 +558,7 @@ void ModifyFlightDetails(Terminal t, Dictionary<string, string> assignGateDict)
         Console.WriteLine($"Expected Departure/Arrival Time: {flight.ExpectedTime:dd/M/yyyy h:mm:ss tt}");
         Console.WriteLine($"Status: {flight.Status}");
         Console.WriteLine($"Special Request Code: "); //incomplete
-        Console.WriteLine($"Boarding Gate: {t.BoardingGates[flightName].GateName}");
+        Console.WriteLine($"Boarding Gate: {t.Flights}");
     }
 
     else if (option == 2)
@@ -632,8 +629,4 @@ void DisplayAirlineFees(Terminal t)
     Console.WriteLine("Airline Fees for Changi Airport Terminal 5");
     Console.WriteLine("=============================================");
     Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}{"Total Fees",-15}");
-    foreach (Airline a in t.Airline.Values)
-    {
-        Console.WriteLine($"{a.Code,-15}{a.Name,-20}{a.CalculateFees(),-15}");
-    }
 }

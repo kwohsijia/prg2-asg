@@ -31,34 +31,7 @@ namespace S10267641F_PRG2Assignment
         public double CalculateFees()
         {
             double baseFee = 300.0;
-            double arrdepFee = 0.0;
-            double specialFee = 0.0;
-
-            if (Flight.Destination == "Singapore (SIN)")
-            {
-                arrdepFee = 500.0;
-            }
-
-            else
-            {
-                arrdepFee = 800.0;
-            }
-
-            if (SupportsCFFT)
-            {
-                specialFee = 150.0;
-            }
-
-            else if (SupportsDDJB)
-            {
-                specialFee = 300.0;
-            }
-
-            else if (SupportsLWTT)
-            {
-                specialFee = 500.0;
-            }
-            return baseFee + arrdepFee;
+            return baseFee;
         }
 
         public override string ToString()

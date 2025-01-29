@@ -15,7 +15,7 @@ namespace S10267641F_PRG2Assignment
     {
         public string Name { get; set; }
         public string Code { get; set; }
-        public Dictionary<string, Flight> Flights { get; set; } = new Dictionary<string, Flight>();
+        public Dictionary<string, Flight> Flights { get; set; }
         public Airline(string name, string code)
         {
             Name = name;
@@ -36,13 +36,7 @@ namespace S10267641F_PRG2Assignment
         }
         public double CalculateFees()
         {
-            double totalFees = 0.0;
-            foreach (Flight flight in Flights.Values)
-            {
-                totalFees += flight.CalculateFees();
-            }
-
-            return totalFees;
+            return 0.0;
         }
 
         public bool RemoveFlight(Flight flight)

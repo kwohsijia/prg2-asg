@@ -14,7 +14,7 @@ namespace S10267641F_PRG2Assignment
     class Terminal
     {
         public string TerminalName { get; set; }
-        public Dictionary<string, Airline> Airline { get; set; }
+        public Dictionary<string, Airline> Airlines { get; set; }
         public Dictionary<string, Flight> Flights { get; set; }
         public Dictionary<string, BoardingGate> BoardingGates { get; set; }
         public Dictionary<string, double> GateFees { get; set; }
@@ -22,20 +22,20 @@ namespace S10267641F_PRG2Assignment
         public Terminal(string terminalName)
         {
             TerminalName = terminalName;
-            Airline = new Dictionary<string, Airline>();
+            Airlines = new Dictionary<string, Airline>();
             Flights = new Dictionary<string, Flight>();
             BoardingGates = new Dictionary<string, BoardingGate>();
             GateFees = new Dictionary<string, double>();
         }
         public bool AddAirline(Airline airline)
         {
-            if (Airline.ContainsKey(airline.Code))
+            if (Airlines.ContainsKey(airline.Code))
             {
                 return false;
             }
             else
             {
-                Airline.Add(airline.Code, airline);
+                Airlines.Add(airline.Code, airline);
                 return true;
             }
         }
@@ -58,7 +58,7 @@ namespace S10267641F_PRG2Assignment
             string code = flight.FlightNumber.Substring(0, 2);
             Airline? airline = null;
             
-            foreach (KeyValuePair<string, Airline> a in Airline)
+            foreach (KeyValuePair<string, Airline> a in Airlines)
             {
                 if (a.Value.Code == code)
                 {
@@ -75,7 +75,7 @@ namespace S10267641F_PRG2Assignment
 
         public override string ToString()
         {
-            return "Terminal: " + TerminalName + "Airline: " + Airline + "Flights: " + Flights + "Boarding Gates: " + BoardingGates + "Gate Fees: " + GateFees;
+            return "Terminal: " + TerminalName + "Airline: " + Airlines + "Flights: " + Flights + "Boarding Gates: " + BoardingGates + "Gate Fees: " + GateFees;
         }
     }
 }
