@@ -69,7 +69,7 @@ while (true)
     }
     else if (option == 6)
     {
-        ModifyFlightDetails(terminal);
+        //ModifyFlightDetails(terminal);
     }
     else if (option == 7)
     {
@@ -654,13 +654,13 @@ void DisplayFlightDetails(Terminal t)
         foreach (BoardingGate b in t.BoardingGates.Values)
         {
             if (b.Flight != null && b.Flight.FlightNumber == f.FlightNumber)
-
+            {
                 boardingGate = b.GateName;
-            break; // Exit the loop once the matching gate is found
+                break; // Exit the loop once the matching gate is found
+            }
         }
+        Console.WriteLine("{0,-15} {1,-21} {2,-20} {3,-18} {4,-31} {5,-9} {6,-13} {7}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, boardingGate, flightToCode[f.FlightNumber]);
     }
-    Console.WriteLine("{0,-15} {1,-21} {2,-20} {3,-18} {4,-31} {5,-9} {6,-13} {7}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime, f.Status, boardingGate, flightToCode[f.FlightNumber]);
-    
 }
 
 //Advanced Feature (a)
