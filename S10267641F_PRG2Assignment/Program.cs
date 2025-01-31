@@ -786,8 +786,11 @@ void ProcessFlightsInBulk(Terminal t)
 
         int totalProcessedFlights = assignedCount;
         int totalProcessedGates =assignedCount;
-        double percentageProcessedFlights = (double)assignedCount / totalProcessedFlights * 100;
-        double percentageProcessedGates = (double)assignedCount / totalProcessedGates * 100;
+        int totalFlights = assignedCount + initiallyAssignedFlights;
+        int totalGates = assignedCount + initiallyAssignedGates;
+
+        double percentageProcessedFlights = (double)assignedCount / totalFlights * 100;
+        double percentageProcessedGates = (double)assignedCount / totalGates * 100;
 
         Console.WriteLine($"Total Flights Assigned: {assignedCount}");
         Console.WriteLine($"Remaining Unassigned Flights: {unassignedFlights.Count}");
