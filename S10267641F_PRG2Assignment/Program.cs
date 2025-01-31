@@ -784,8 +784,8 @@ void ProcessFlightsInBulk(Terminal t)
             }
         }
 
-        int totalProcessedFlights = assignedCount + initiallyAssignedFlights;
-        int totalProcessedGates = initiallyAssignedGates + assignedCount;
+        int totalProcessedFlights = assignedCount;
+        int totalProcessedGates =assignedCount;
         double percentageProcessedFlights = (double)assignedCount / totalProcessedFlights * 100;
         double percentageProcessedGates = (double)assignedCount / totalProcessedGates * 100;
 
