@@ -226,13 +226,14 @@ void ListBoardingGates(Terminal t)
 //Basic Feature 5: Assign a boarding gate to a flight
 void AssignBoardingGate(Terminal t) // Basic feature 5
 {
+
     Console.WriteLine("============================================\nAssign a Boarding Gate to a Flight\n============================================");
     while (true)
     {
         try
         {
             Console.WriteLine("Enter Flight Number:");
-            string flightNumber = Console.ReadLine();
+            string flightNumber = Console.ReadLine().ToUpper();
 
             // Validate if the flight number exists
             if (!t.Flights.ContainsKey(flightNumber))
@@ -242,7 +243,7 @@ void AssignBoardingGate(Terminal t) // Basic feature 5
             }
 
             Console.WriteLine("Enter Boarding Gate Name:");
-            string gateName = Console.ReadLine();
+            string gateName = Console.ReadLine().ToUpper();
 
             // Validate if the boarding gate exists
             if (!t.BoardingGates.ContainsKey(gateName))
