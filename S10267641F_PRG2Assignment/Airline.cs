@@ -36,7 +36,12 @@ namespace S10267641F_PRG2Assignment
         }
         public double CalculateFees()
         {
-            return 0.0;
+            double subtotalFees = 0.0;
+            foreach(Flight flight in Flights.Values)
+            {
+                subtotalFees += flight.CalculateFees();
+            }
+            return subtotalFees;
         }
 
         public bool RemoveFlight(Flight flight)

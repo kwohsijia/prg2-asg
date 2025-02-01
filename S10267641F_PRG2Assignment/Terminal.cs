@@ -70,6 +70,7 @@ namespace S10267641F_PRG2Assignment
 
         public void PrintAirlineFees()
         {
+            Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}{"Subtotal Fees",-15}{"Subtotal Discounts",-15}{"Total Fees",-15}");
 
         }
 

@@ -106,24 +106,40 @@ while (true)
 //Basic Feature 1: Load files (airlines and boarding gates)
 void LoadAirline(Terminal t)
 {
-    int airlinecount = 0;
-    //Load the airlines.csv file
-    using (StreamReader sr = new StreamReader("airlines.csv"))
+    try
     {
-        string? s = sr.ReadLine();
-        while ((s = sr.ReadLine()) != null)
+        int airlinecount = 0;
+        //Load the airlines.csv file
+        using (StreamReader sr = new StreamReader("airlines.csv"))
         {
-            string[] data = s.Split(',');
-            string name = data[0];
-            string code = data[1];
-            //Create airline object
-            Airline newairline = new Airline(name, code);
-            //Add airline object
-            t.AddAirline(newairline);
-            airlinecount++;
+            string? s = sr.ReadLine();
+            while ((s = sr.ReadLine()) != null)
+            {
+                string[] data = s.Split(',');
+                string name = data[0];
+                string code = data[1];
+                //Create airline object
+                Airline newairline = new Airline(name, code);
+                //Add airline object
+                t.AddAirline(newairline);
+                airlinecount++;
+            }
+            Console.WriteLine("Loading Airlines...");
+            Console.WriteLine($"{airlinecount} Airlines Loaded!");
         }
-        Console.WriteLine("Loading Airlines...");
-        Console.WriteLine($"{airlinecount} Airlines Loaded!");
+    }
+
+    catch (ArgumentException)
+    {
+        Console.WriteLine("Error: airlines.csv file is empty. Please ensure the file is not empty.");
+    }
+    catch (FileNotFoundException)
+    {
+        Console.WriteLine("Error: airlines.csv file not found. Please ensure the file is in the correct directory.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
     }
 }
 
@@ -155,60 +171,83 @@ void LoadBoardingGate (Terminal t)
 //Basic Feature 2: Load files (flights)
 void LoadFlights(Terminal t, Dictionary<string, string> d)
 {
-    int flightCount = 0;
-    //Load flights.csv file
-    using (StreamReader sr = new StreamReader("flights.csv"))
+    try
     {
-        string s = sr.ReadLine();
-        while ((s = sr.ReadLine()) != null)
+        int flightCount = 0;
+        //Load flights.csv file
+        using (StreamReader sr = new StreamReader("flights.csv"))
         {
-            string[] data = s.Split(',');
-            string flightNumber = data[0];
-            string origin = data[1];
-            string destination = data[2];
-            DateTime expectedTime = DateTime.Parse(data[3]);
-            string type = data[4];
-            //create flight objects and add into dictionary according to special request code
-            if (type == "CFFT")
+            string s = sr.ReadLine();
+            while ((s = sr.ReadLine()) != null)
             {
-                CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
-                t.Flights.Add(flightNumber, newflight);
-                flightToCode.Add(flightNumber, "CFFT");
+                string[] data = s.Split(',');
+                string flightNumber = data[0];
+                string origin = data[1];
+                string destination = data[2];
+                DateTime expectedTime = DateTime.Parse(data[3]);
+                string type = data[4];
+                //create flight objects and add into dictionary according to special request code
+                if (type == "CFFT")
+                {
+                    CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
+                    t.Flights.Add(flightNumber, newflight);
+                    flightToCode.Add(flightNumber, "CFFT");
+                }
+                else if (type == "DDJB")
+                {
+                    DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
+                    t.Flights.Add(flightNumber, newflight);
+                    flightToCode.Add(flightNumber, "DDJB");
+                }
+                else if (type == "LWTT")
+                {
+                    LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
+                    t.Flights.Add(flightNumber, newflight);
+                    flightToCode.Add(flightNumber, "LWTT");
+                }
+                else
+                {
+                    NORMFlight newflight = new NORMFlight(flightNumber, origin, destination, expectedTime);
+                    t.Flights.Add(flightNumber, newflight);
+                    flightToCode.Add(flightNumber, "None");
+                }
+                flightCount++;
             }
-            else if (type == "DDJB")
-            {
-                DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
-                t.Flights.Add(flightNumber, newflight);
-                flightToCode.Add(flightNumber, "DDJB");
-            }
-            else if (type == "LWTT")
-            {
-                LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
-                t.Flights.Add(flightNumber, newflight);
-                flightToCode.Add(flightNumber, "LWTT");
-            }
-            else
-            {
-                NORMFlight newflight = new NORMFlight(flightNumber, origin, destination, expectedTime);
-                t.Flights.Add(flightNumber, newflight);
-                flightToCode.Add(flightNumber, "None");
-            }
-            flightCount++;
+            Console.WriteLine("Loading Flights...");
+            Console.WriteLine($"{flightCount} Flights Loaded!");
         }
-        Console.WriteLine("Loading Flights...");
-        Console.WriteLine($"{flightCount} Flights Loaded!");
+    }
+    catch (ArgumentException)
+    {
+        Console.WriteLine("Error: flights.csv file is empty. Please ensure the file is not empty.");
+    }
+    catch (FileNotFoundException)
+    {
+        Console.WriteLine("Error: flights.csv file not found. Please ensure the file is in the correct directory.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+
     }
 }
 
-//Basic Feature 3: List all flights with their basic information
-void ListFlights(Terminal t)
+    //Basic Feature 3: List all flights with their basic information
+    void ListFlights(Terminal t)
 {
     Console.WriteLine("=============================================\nList of Flights for Changi Airport Terminal 5\n=============================================");
     Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10}", "Flight Number", "Airline Name", "Origin", "Destination", "Expected Departure/Arrival Time");
-    //list all flights in the flight dictionary
-    foreach (Flight f in t.Flights.Values)
+    try
     {
-        Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime);
+        //list all flights in the flight dictionary
+        foreach (Flight f in t.Flights.Values)
+        {
+            Console.WriteLine("{0,-15} {1,-23} {2,-23} {3,-23} {4,-10}", f.FlightNumber, t.GetAirlineFromFlight(f).Name, f.Origin, f.Destination, f.ExpectedTime);
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
     }
 }
 
@@ -219,16 +258,23 @@ void ListBoardingGates(Terminal t)
     Console.WriteLine("List of Boarding Gates for Changi Airport Terminal 5");
     Console.WriteLine("=============================================");
     Console.WriteLine($"{"Gate Name",-16}{"DDJB",-23}{"CFFT",-23}{"LWTT",-23}Flight");
-    foreach (KeyValuePair<string, BoardingGate> kvp in t.BoardingGates)
+    try
     {
-        if (kvp.Value.Flight == null)
+        foreach (KeyValuePair<string, BoardingGate> kvp in t.BoardingGates)
         {
-            Console.WriteLine($"{kvp.Key,-16}{kvp.Value.SupportsDDJB,-23}{kvp.Value.SupportsCFFT,-23}{kvp.Value.SupportsLWTT,-23}");
+            if (kvp.Value.Flight == null)
+            {
+                Console.WriteLine($"{kvp.Key,-16}{kvp.Value.SupportsDDJB,-23}{kvp.Value.SupportsCFFT,-23}{kvp.Value.SupportsLWTT,-23}");
+            }
+            else
+            {
+                Console.WriteLine($"{kvp.Key,-16}{kvp.Value.SupportsDDJB,-23}{kvp.Value.SupportsCFFT,-23}{kvp.Value.SupportsLWTT,-23}{kvp.Value.Flight.FlightNumber}");
+            }
         }
-        else
-        {
-            Console.WriteLine($"{kvp.Key,-16}{kvp.Value.SupportsDDJB,-23}{kvp.Value.SupportsCFFT,-23}{kvp.Value.SupportsLWTT,-23}{kvp.Value.Flight.FlightNumber}");
-        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
     }
 }
 
@@ -844,5 +890,4 @@ void DisplayAirlineFees(Terminal t)
     Console.WriteLine("=============================================");
     Console.WriteLine("Airline Fees for Changi Airport Terminal 5");
     Console.WriteLine("=============================================");
-    Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}{"Total Fees",-15}");
 }
