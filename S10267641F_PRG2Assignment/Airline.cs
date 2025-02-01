@@ -20,6 +20,7 @@ namespace S10267641F_PRG2Assignment
         {
             Name = name;
             Code = code;
+            Flights = new Dictionary<string, Flight>();
         }
 
         public bool AddFlight(Flight flight)

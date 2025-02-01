@@ -191,24 +191,28 @@ void LoadFlights(Terminal t, Dictionary<string, string> d)
                 {
                     CFFTFlight newflight = new CFFTFlight(flightNumber, origin, destination, expectedTime);
                     t.Flights.Add(flightNumber, newflight);
+                    t.GetAirlineFromFlight(newflight).AddFlight(newflight);
                     flightToCode.Add(flightNumber, "CFFT");
                 }
                 else if (type == "DDJB")
                 {
                     DDJBFlight newflight = new DDJBFlight(flightNumber, origin, destination, expectedTime);
                     t.Flights.Add(flightNumber, newflight);
+                    t.GetAirlineFromFlight(newflight).AddFlight(newflight);
                     flightToCode.Add(flightNumber, "DDJB");
                 }
                 else if (type == "LWTT")
                 {
                     LWTTFlight newflight = new LWTTFlight(flightNumber, origin, destination, expectedTime);
                     t.Flights.Add(flightNumber, newflight);
+                    t.GetAirlineFromFlight(newflight).AddFlight(newflight);
                     flightToCode.Add(flightNumber, "LWTT");
                 }
                 else
                 {
                     NORMFlight newflight = new NORMFlight(flightNumber, origin, destination, expectedTime);
                     t.Flights.Add(flightNumber, newflight);
+                    t.GetAirlineFromFlight(newflight).AddFlight(newflight);
                     flightToCode.Add(flightNumber, "None");
                 }
                 flightCount++;
@@ -442,6 +446,7 @@ void CreateFlight(Terminal t)
 
             // Add the new flight to the terminal and the flight-to-code mapping
             t.Flights.Add(newFlightNumber, newFlight);
+            t.GetAirlineFromFlight(newFlight).AddFlight(newFlight);
             flightToCode.Add(newFlightNumber, newType == "None" ? string.Empty : newType);
 
             // Append to flights.csv
@@ -877,6 +882,7 @@ void ProcessFlightsInBulk(Terminal t)
         Console.WriteLine($"Remaining Unassigned Flights: {unassignedFlights.Count}");
         Console.WriteLine($"Total Flights and Boarding Gates Processed: {totalProcessedFlights}, {totalProcessedGates}");
         Console.WriteLine($"Percentage of Flights and Gates Processed Automatically: {percentageProcessedFlights:F2}% Flights, {percentageProcessedGates:F2}% Gates");
+        Console.WriteLine();
     }
     catch (Exception ex)
     {
@@ -885,9 +891,35 @@ void ProcessFlightsInBulk(Terminal t)
 }
 
 //Advanced Feature (b)
-void DisplayAirlineFees(Terminal t)
+void DisplayAirlineFees(Terminal terminal)
 {
-    Console.WriteLine("=============================================");
-    Console.WriteLine("Airline Fees for Changi Airport Terminal 5");
-    Console.WriteLine("=============================================");
+    bool allFlightsAssigned = true;
+
+    foreach (Flight flight in terminal.Flights.Values)
+    {
+        bool isAssigned = false;
+        foreach (BoardingGate gate in terminal.BoardingGates.Values)
+        {
+            if (gate.Flight == flight)
+            {
+                isAssigned = true;
+                break;
+            }
+        }
+        if (!isAssigned)
+        {
+            allFlightsAssigned = false;
+            break;
+        }
+    }
+
+    if (allFlightsAssigned)
+    {
+        terminal.PrintAirlineFees();
+    }
+    else
+    {
+        Console.WriteLine("Not all flights have been assigned a boarding gate. Please assign and try again");
+        Console.WriteLine();
+    }
 }

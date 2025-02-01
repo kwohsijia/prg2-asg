@@ -70,8 +70,52 @@ namespace S10267641F_PRG2Assignment
 
         public void PrintAirlineFees()
         {
-            Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}{"Subtotal Fees",-15}{"Subtotal Discounts",-15}{"Total Fees",-15}");
+            Console.WriteLine($"{"Airline Code",-15}{"Airline Name",-20}{"Subtotal Fees",-15}{"Subtotal Discounts",-20}{"Total Fees",-15}");
+            double totalFees = 0.0;
+            double totalDiscounts = 0.0;
+            foreach (Airline airline in Airlines.Values)
+            {
+                double subtotalFees = airline.CalculateFees();
+                double subtotalDiscounts = 0.0;
 
+                foreach (Flight flight in airline.Flights.Values)
+                {
+                    foreach (BoardingGate boardingGate in BoardingGates.Values)
+                    {
+                        if (boardingGate.Flight == flight)
+                        {
+                            subtotalFees += boardingGate.CalculateFees();
+                        }
+                    }
+
+                    if (flight.ExpectedTime.Hour < 11 || flight.ExpectedTime.Hour > 21)
+                    {
+                        subtotalDiscounts += 110;
+                    }
+                    if (new List<string> { "Dubai (DXB)", "Bangkok (BKK)", "Tokyo (NRT)" }.Contains(flight.Origin))
+                    {
+                        subtotalDiscounts += 25;
+                    }
+                    if (flight is NORMFlight)
+                    {
+                        subtotalDiscounts += 50;
+                    }
+                }
+                if (airline.Flights.Values.Count > 5)
+                {
+                   subtotalDiscounts += subtotalFees * 0.03;
+                }
+                subtotalDiscounts += Math.Floor(airline.Flights.Values.Count / 3.0) * 350.0;
+                Console.WriteLine($"{airline.Code,-15}{airline.Name,-20}{subtotalFees,-15:C2}{subtotalDiscounts,-20:C2}{subtotalFees - subtotalDiscounts,-15:C2}");
+                totalFees += subtotalFees;
+                totalDiscounts += subtotalDiscounts;
+            }
+            Console.WriteLine();
+            Console.WriteLine($"Subtotal of all Airline fees: {totalFees:C2}");
+            Console.WriteLine($"Subtotal of all Airline discounts: {totalDiscounts:C2}");
+            Console.WriteLine($"Grand total of Airline fees: {totalFees - totalDiscounts:C2}");
+            Console.WriteLine($"Percentage of the subtotal discounts over final fees: {(totalDiscounts / (totalFees - totalDiscounts)) * 100.0:F2}%");
+            Console.WriteLine();
         }
 
         public override string ToString()
