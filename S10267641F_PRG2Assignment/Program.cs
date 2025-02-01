@@ -235,13 +235,14 @@ void ListBoardingGates(Terminal t)
 //Basic Feature 5: Assign a boarding gate to a flight
 void AssignBoardingGate(Terminal t) // Basic feature 5
 {
+
     Console.WriteLine("============================================\nAssign a Boarding Gate to a Flight\n============================================");
     while (true)
     {
         try
         {
             Console.WriteLine("Enter Flight Number:");
-            string flightNumber = Console.ReadLine();
+            string flightNumber = Console.ReadLine().ToUpper();
 
             // Validate if the flight number exists
             if (!t.Flights.ContainsKey(flightNumber))
@@ -251,7 +252,7 @@ void AssignBoardingGate(Terminal t) // Basic feature 5
             }
 
             Console.WriteLine("Enter Boarding Gate Name:");
-            string gateName = Console.ReadLine();
+            string gateName = Console.ReadLine().ToUpper();
 
             // Validate if the boarding gate exists
             if (!t.BoardingGates.ContainsKey(gateName))
@@ -818,10 +819,13 @@ void ProcessFlightsInBulk(Terminal t)
             }
         }
 
-        int totalProcessedFlights = assignedCount + initiallyAssignedFlights;
-        int totalProcessedGates = initiallyAssignedGates + assignedCount;
-        double percentageProcessedFlights = (double)assignedCount / totalProcessedFlights * 100;
-        double percentageProcessedGates = (double)assignedCount / totalProcessedGates * 100;
+        int totalProcessedFlights = assignedCount;
+        int totalProcessedGates =assignedCount;
+        int totalFlights = assignedCount + initiallyAssignedFlights;
+        int totalGates = assignedCount + initiallyAssignedGates;
+
+        double percentageProcessedFlights = (double)assignedCount / totalFlights * 100;
+        double percentageProcessedGates = (double)assignedCount / totalGates * 100;
 
         Console.WriteLine($"Total Flights Assigned: {assignedCount}");
         Console.WriteLine($"Remaining Unassigned Flights: {unassignedFlights.Count}");
