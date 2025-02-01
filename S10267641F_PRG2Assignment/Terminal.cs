@@ -88,7 +88,7 @@ namespace S10267641F_PRG2Assignment
                         }
                     }
 
-                    if (flight.ExpectedTime.Hour < 11 || flight.ExpectedTime.Hour > 21)
+                    if (flight.ExpectedTime.Hour < 11 || (flight.ExpectedTime.Hour == 21 && flight.ExpectedTime.Minute > 0) ||flight.ExpectedTime.Hour > 21)
                     {
                         subtotalDiscounts += 110;
                     }

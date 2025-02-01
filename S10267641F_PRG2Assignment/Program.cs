@@ -416,9 +416,9 @@ void CreateFlight(Terminal t)
 
             Console.Write("Enter Expected Departure/Arrival Time (dd/MM/yyyy HH:mm): ");
             DateTime newExpectedTime;
-            if (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out newExpectedTime))
+            if (!DateTime.TryParseExact(Console.ReadLine(), "dd/M/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out newExpectedTime))
             {
-                Console.WriteLine("Error: Invalid date format. Please enter in the format dd/MM/yyyy HH:mm.");
+                Console.WriteLine("Error: Invalid date format. Please enter in the format dd/M/yyyy HH:mm.");
                 continue; // Prompt user again
             }
 
@@ -853,6 +853,8 @@ void ProcessFlightsInBulk(Terminal t)
                     (!(flight is CFFTFlight || flight is DDJBFlight || flight is LWTTFlight)))
                 {
                     assignedGate = gate;
+                    t.BoardingGates[gate.GateName].Flight = flight;
+                    flight.Status = "On Time";
                     break;
                 }
             }
@@ -871,17 +873,24 @@ void ProcessFlightsInBulk(Terminal t)
         }
 
         int totalProcessedFlights = assignedCount;
-        int totalProcessedGates =assignedCount;
+        int totalProcessedGates = assignedCount;
         int totalFlights = assignedCount + initiallyAssignedFlights;
         int totalGates = assignedCount + initiallyAssignedGates;
 
-        double percentageProcessedFlights = (double)assignedCount / totalFlights * 100;
-        double percentageProcessedGates = (double)assignedCount / totalGates * 100;
+        double percentageProcessedFlights = (double)assignedCount / initiallyAssignedFlights * 100;
+        double percentageProcessedGates = (double)assignedCount / initiallyAssignedGates * 100;
 
         Console.WriteLine($"Total Flights Assigned: {assignedCount}");
         Console.WriteLine($"Remaining Unassigned Flights: {unassignedFlights.Count}");
         Console.WriteLine($"Total Flights and Boarding Gates Processed: {totalProcessedFlights}, {totalProcessedGates}");
-        Console.WriteLine($"Percentage of Flights and Gates Processed Automatically: {percentageProcessedFlights:F2}% Flights, {percentageProcessedGates:F2}% Gates");
+        if (initiallyAssignedFlights == 0 || initiallyAssignedGates == 0)
+        {
+            Console.WriteLine("All flights were processed automatically.");
+        }
+        else
+        {
+            Console.WriteLine($"Percentage of Flights and Gates Processed Automatically: {percentageProcessedFlights:F2}% Flights, {percentageProcessedGates:F2}% Gates");
+        }
         Console.WriteLine();
     }
     catch (Exception ex)
