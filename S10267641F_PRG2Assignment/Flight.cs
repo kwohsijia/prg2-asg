@@ -27,7 +27,7 @@ namespace S10267641F_PRG2Assignment
             Status = "Scheduled";
         }
         public virtual double CalculateFees()
-        {
+        { 
             double destOriFee = 0.0;
             if (Destination == "Singapore (SIN)")
             {
