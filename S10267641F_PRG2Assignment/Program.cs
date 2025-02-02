@@ -1107,10 +1107,11 @@ void DisplaySummary(Terminal t)
             if (!isAssigned)
             {
                 totalUnassignedFlights++;
-                if (flight.ExpectedTime <= DateTime.Now.AddMinutes(60) && flight.ExpectedTime >= DateTime.Now)
-                {
-                    flightsWithinOneHour.Add(flight);
-                }
+            }
+
+            if (flight.ExpectedTime <= DateTime.Now.AddMinutes(60) && flight.ExpectedTime >= DateTime.Now)
+            {
+                flightsWithinOneHour.Add(flight);
             }
         }
         Console.WriteLine("=============================================");
@@ -1125,7 +1126,7 @@ void DisplaySummary(Terminal t)
         Console.WriteLine($"Flights not assigned to boarding gates: {totalUnassignedFlights}");
         Console.WriteLine();
         Console.WriteLine("Current Time: " + DateTime.Now);
-        Console.WriteLine("Unassigned flights taking off within an hour from now:");
+        Console.WriteLine("Flights taking off within an hour from now:");
 
         if (flightsWithinOneHour.Count > 0)
         {
@@ -1138,7 +1139,7 @@ void DisplaySummary(Terminal t)
         else
         {
             Console.WriteLine();
-            Console.WriteLine("No flights taking off within an hour that are unassigned to boarding gate.");
+            Console.WriteLine("No flights taking off within an hour from now.");
         }
         Console.WriteLine();
     }
