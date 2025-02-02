@@ -81,6 +81,7 @@ namespace S10267641F_PRG2Assignment
 
                 foreach (Flight flight in airline.Flights.Values)
                 {
+                    //Ad boarding gate base fees
                     foreach (BoardingGate boardingGate in BoardingGates.Values)
                     {
                         if (boardingGate.Flight == flight)
@@ -89,19 +90,23 @@ namespace S10267641F_PRG2Assignment
                         }
                     }
 
+                    //Check if flight is arriving/departing before 11am or after 9pm
                     if (flight.ExpectedTime.Hour < 11 || (flight.ExpectedTime.Hour == 21 && flight.ExpectedTime.Minute > 0) ||flight.ExpectedTime.Hour > 21)
                     {
                         subtotalDiscounts += 110;
                     }
+                    //Check if flight origin is Dubai, Bangkok or Tokyo
                     if (new List<string> { "Dubai (DXB)", "Bangkok (BKK)", "Tokyo (NRT)" }.Contains(flight.Origin))
                     {
                         subtotalDiscounts += 25;
                     }
+                    //Check if flight has special code
                     if (flight is NORMFlight)
                     {
                         subtotalDiscounts += 50;
                     }
                 }
+                //Caclulate discount if there are more than 5 flights for the airline
                 if (airline.Flights.Values.Count > 5)
                 {
                    subtotalDiscounts += subtotalFees * 0.03;
