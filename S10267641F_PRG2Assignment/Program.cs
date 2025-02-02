@@ -29,6 +29,7 @@ while (true)
     Console.WriteLine("7. Display Flight Schedule");
     Console.WriteLine("8. Assign remaining flights to boarding gates");
     Console.WriteLine("9. Display Airline Fees For The Day");
+    Console.WriteLine("10. Summary of Operations");
     Console.WriteLine("0. Exit");
 
     try
@@ -51,7 +52,7 @@ while (true)
         }
 
         // Validate the range of the option
-        if (option < 0 || option > 9)
+        if (option < 0 || option > 10)
         {
             Console.WriteLine("Please enter a valid option from 0 to 9.");
             continue;
@@ -89,6 +90,9 @@ while (true)
                 break;
             case 9:
                 DisplayAirlineFees(terminal);
+                break;
+            case 10:
+                DisplaySummary(terminal);
                 break;
             default:
                 Console.WriteLine("Unexpected error occurred. Please try again.");
@@ -451,11 +455,11 @@ void CreateFlight(Terminal t)
                 break; // Exit the loop if origin and destination are different
             }
 
-            Console.Write("Enter Expected Departure/Arrival Time (dd/MM/yyyy HH:mm): ");
+            Console.Write("Enter Expected Departure/Arrival Time (dd/mm/yyyy HH:mm): ");
             DateTime newExpectedTime;
-            if (!DateTime.TryParseExact(Console.ReadLine(), "dd/M/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out newExpectedTime))
+            if (!DateTime.TryParseExact(Console.ReadLine(), "d/M/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out newExpectedTime))
             {
-                Console.WriteLine("Invalid date format. Please enter in the format dd/M/yyyy HH:mm.");
+                Console.WriteLine("Invalid date format. Please enter in the format dd/mm/yyyy HH:mm.");
                 continue; // Prompt user again
             }
 
@@ -730,11 +734,11 @@ void ModifyFlightDetails(Terminal t)
                             break; // Exit loop when valid input is provided
                         }
 
-                        Console.Write("Enter new Expected Departure/Arrival Time (dd/m/yyyy hh:mm): ");
-                        if (!DateTime.TryParseExact(Console.ReadLine(), "dd/M/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime newTime))
+                        Console.Write("Enter new Expected Departure/Arrival Time (dd/mm/yyyy hh:mm): ");
+                        if (!DateTime.TryParseExact(Console.ReadLine(), "d/M/yyyy HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime newTime))
                         {
-                            Console.WriteLine("Invalid date format. Please use dd/MM/yyyy HH:mm.");
-                            return;
+                            Console.WriteLine("Invalid date format. Please use dd/mm/yyyy HH:mm.");
+                            break;
                         }
 
                         flight.ExpectedTime = newTime;
@@ -775,7 +779,7 @@ void ModifyFlightDetails(Terminal t)
                         Console.Write("Enter new Special Request Code (CFFT/DDJB/LWTT/None): ");
                         string specialcode = Console.ReadLine().ToUpper();
 
-                        if (specialcode != "CFFT" && specialcode != "DDJB" && specialcode != "LWTT" && specialcode != "NONE")
+                        if (specialcode != "CFFT" && specialcode != "DDJB" && specialcode != "LWTT" && specialcode != "None")
                         {
                             Console.WriteLine("Invalid code. Please enter CFFT, DDJB, LWTT, or None.");
                             Console.WriteLine();
@@ -1054,5 +1058,92 @@ void DisplayAirlineFees(Terminal terminal)
     catch (Exception ex)
     {
         Console.WriteLine($"An error occurred: {ex.Message}");
+    }
+}
+
+// Bonus Feature Ian
+
+void DisplaySummary(Terminal t)
+{
+    try
+    {
+        int totalFlights = t.Flights.Count;
+        int totalDepartingFlights = 0;
+        int totalArrivingFlights = 0;
+        int totalDelayedFlights = 0;
+        int totalSpecialFlights = 0;
+        int totalAssignedFlights = 0;
+        int totalUnassignedFlights = 0;
+        List<Flight> flightsWithinOneHour = new List<Flight>();
+
+        foreach (Flight flight in terminal.Flights.Values)
+        {
+            if (flight.Origin == "Singapore (SIN)")
+            {
+                totalDepartingFlights++;
+            }
+            else if (flight.Destination == "Singapore (SIN)")
+            {
+                totalArrivingFlights++;
+            }
+            if (flight.Status == "Delayed")
+            {
+                totalDelayedFlights++;
+            }
+            if (flight is DDJBFlight || flight is CFFTFlight || flight is LWTTFlight)
+            {
+                totalSpecialFlights++;
+            }
+            bool isAssigned = false;
+            foreach (BoardingGate boardingGate in terminal.BoardingGates.Values)
+            {
+                if (boardingGate.Flight == flight)
+                {
+                    isAssigned = true;
+                    totalAssignedFlights++;
+                    break;
+                }
+            }
+            if (!isAssigned)
+            {
+                totalUnassignedFlights++;
+                if (flight.ExpectedTime <= DateTime.Now.AddMinutes(60) && flight.ExpectedTime >= DateTime.Now)
+                {
+                    flightsWithinOneHour.Add(flight);
+                }
+            }
+        }
+        Console.WriteLine("=============================================");
+        Console.WriteLine("Summary of all operations Changi Terminal 5");
+        Console.WriteLine("=============================================");
+        Console.WriteLine($"Total number of flights: {totalFlights}");
+        Console.WriteLine($"Departing flights: {totalDepartingFlights}");
+        Console.WriteLine($"Arriving flights: {totalArrivingFlights}");
+        Console.WriteLine($"Delayed flights: {totalDelayedFlights}");
+        Console.WriteLine($"Flights with special request codes: {totalSpecialFlights}");
+        Console.WriteLine($"Flights assigned to boarding gates: {totalAssignedFlights}");
+        Console.WriteLine($"Flights not assigned to boarding gates: {totalUnassignedFlights}");
+        Console.WriteLine();
+        Console.WriteLine("Current Time: " + DateTime.Now);
+        Console.WriteLine("Unassigned flights taking off within an hour from now:");
+
+        if (flightsWithinOneHour.Count > 0)
+        {
+            foreach (Flight f in flightsWithinOneHour)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Flight {f.FlightNumber} scheduled at {f.ExpectedTime}");
+            }
+        }
+        else
+        {
+            Console.WriteLine();
+            Console.WriteLine("No flights taking off within an hour that are unassigned to boarding gate.");
+        }
+        Console.WriteLine();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An unexpected error occurred: {ex.Message}");
     }
 }
